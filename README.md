@@ -1,13 +1,13 @@
 # Building instructions
-## Files required -
+### Files required -
 module.json (Contains instructions for yota on how to build)
 Create a directory inside repository called "Source" where the source code will
 live inside
 
-## Commands Required Initially
+### Commands Required Initially
 yt target bbc-microbit-classic-gcc
 
-## Required after
+### Required after
 yt build
 
 
