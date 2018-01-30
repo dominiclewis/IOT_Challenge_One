@@ -42,12 +42,12 @@ set(YOTTA_BUILD_YEAR "2018") # UTC year
 set(YOTTA_BUILD_MONTH "1") # UTC month 1-12
 set(YOTTA_BUILD_DAY "30") # UTC day 1-31
 set(YOTTA_BUILD_HOUR "22") # UTC hour 0-24
-set(YOTTA_BUILD_MINUTE "4") # UTC minute 0-59
-set(YOTTA_BUILD_SECOND "2") # UTC second 0-61
-set(YOTTA_BUILD_UUID "c1071e67-9e7b-49df-abbe-b523400ab64a") # unique random UUID for each build
-set(YOTTA_BUILD_VCS_ID "b1ad284568455b786d66d0a220cc9ef07a59b868") # git or mercurial hash
+set(YOTTA_BUILD_MINUTE "8") # UTC minute 0-59
+set(YOTTA_BUILD_SECOND "25") # UTC second 0-61
+set(YOTTA_BUILD_UUID "e2cf2448-2bdd-44be-b005-7f9430b9873a") # unique random UUID for each build
+set(YOTTA_BUILD_VCS_ID "30541cefa7b4be294c49a4261bb56557a0718633") # git or mercurial hash
 set(YOTTA_BUILD_VCS_CLEAN "0") # evaluates true if the version control system was clean, otherwise false
-set(YOTTA_BUILD_VCS_DESCRIPTION "b1ad284") # git describe or mercurial equivalent
+set(YOTTA_BUILD_VCS_DESCRIPTION "30541ce") # git describe or mercurial equivalent
 set(TARGET BBC_MICROBIT_CLASSIC_GCC)
 set(TARGET_LIKE_BBC_MICROBIT_CLASSIC_GCC TRUE)
 set(YOTTA_BUILD_INFO_HEADER "/home/student/Development/IOT_Challenge_One/build/bbc-microbit-classic-gcc/yotta_build_info.h")
@@ -172,8 +172,13 @@ set(YOTTA_MODULE_NAME iot-example)
 # recurse into subdirectories for this component, using the two-argument
 # add_subdirectory because the directories referred to here exist in the source
 # tree, not the working directory
+add_subdirectory(
+    "/home/student/Development/IOT_Challenge_One/build/bbc-microbit-classic-gcc/source"
+    "${CMAKE_BINARY_DIR}/./source"
+)
 
-# (not setting YOTTA_MODULE_NAME preprocessor definition as this module doesn't
-# have any sources to build)
+# make YOTTA_MODULE_NAME available as a preprocessor symbol when
+# compiling this module:
+target_compile_definitions(iot-example PRIVATE "-DYOTTA_MODULE_NAME=iot-example")
 
 # include .cmake files provided by the target:

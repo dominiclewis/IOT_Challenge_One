@@ -44,3 +44,7 @@
 /home/student/Development/IOT_Challenge_One/build/bbc-microbit-classic-gcc/ym/microbit/source/CMakeFiles/rebuild_cache.dir
 /home/student/Development/IOT_Challenge_One/build/bbc-microbit-classic-gcc/ym/microbit/source/CMakeFiles/test.dir
 /home/student/Development/IOT_Challenge_One/build/bbc-microbit-classic-gcc/ym/microbit/source/CMakeFiles/microbit.dir
+/home/student/Development/IOT_Challenge_One/build/bbc-microbit-classic-gcc/source/CMakeFiles/test.dir
+/home/student/Development/IOT_Challenge_One/build/bbc-microbit-classic-gcc/source/CMakeFiles/edit_cache.dir
+/home/student/Development/IOT_Challenge_One/build/bbc-microbit-classic-gcc/source/CMakeFiles/rebuild_cache.dir
+/home/student/Development/IOT_Challenge_One/build/bbc-microbit-classic-gcc/source/CMakeFiles/iot-example.dir

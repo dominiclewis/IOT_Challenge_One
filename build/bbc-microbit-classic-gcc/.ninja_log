@@ -161,3 +161,5 @@
 20459	20487	0	ym/microbit-dal/source/microbit-dal.a	5ebd96235da8e1eb
 20487	20959	0	ym/microbit/source/CMakeFiles/microbit.dir/home/student/Development/IOT_Challenge_One/yotta_modules/microbit/source/MicroBit.cpp.o	2fd530e5b58d4137
 20960	20963	0	ym/microbit/source/microbit.a	1fdef2460c4dd018
+9	585	0	source/CMakeFiles/iot-example.dir/home/student/Development/IOT_Challenge_One/source/main.cpp.o	7fecc0edea44cd50
+586	1146	0	source/iot-example	83eaaebd021f7e6a

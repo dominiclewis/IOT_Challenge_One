@@ -5,13 +5,13 @@
  * Desc: IOT Assignment 01
  */
 
-#include "Microbit.h"
+#include "MicroBit.h"
 
 MicroBit uBit;
 
 int main(){
 
   uBit.init();
-  UBit.display.scroll("Test");
+  uBit.display.scroll("Test");
   release_fiber(); //Release the fiber in main to return control to scheduler
 }
