@@ -7,69 +7,15 @@
  */
 
 #include "MicroBit.h"
-#define PLAYERONEID 1
-#define PLAYERTWOID 2
+#include "Player.h"
 
+class Player;//Prototype
 MicroBit uBit;//Instance of the MicroBit class
-//MicroBitDisplay display; //Create an instance of 5x5 Led Matrix
-MicroBitImage screen(5,5);
+MicroBitImage screen(5,5); //Create an instance of 5x5 Led Matrix
+Player player_1(true); //instantiate player
+Player player_2(false);
 
-/*
-*Purpose: Contains information on the players in the game
-*/
-class Player
-{
-  public:   //Access specifier
-    Player(int score, bool user) : player_score(score), player_is_user(user) //Constructor
-    {}
-    //Apparantly the above initialises the player classes without assignments
 
-    /*
-    * Purpose: This method will return the players score
-    * Accepts: N/A
-    * Returns: Integer containing players score
-    */
-    int get_score()
-    {
-        return player_score;
-    }
-
-    /*
-    *Purpose: Returns whether or not a player is a user or computer controlled
-    *Accepts: N/A
-    *Returns: Boolean. True if user controlled player, false if otherwise.
-    */
-    bool get_player_is_user()
-    {
-      return player_is_user;
-    }
-    /*
-    *Purpose: Adjusts the score by either incrementing or decrementing by 1.
-    *Accepts: An integer of either 1 or -1
-    *Returns: Boolean - True if an adjustment is carried out, false if otherwise
-    */
-    bool adjust_score(int adjustment)
-    {
-      if ((adjustment == 1) || (adjustment == -1))
-      {
-        player_score += adjustment;
-        return true;
-      }
-      else
-      {
-        return false;
-      }
-
-    }
-
-  private: //Private variables
-    int player_score;
-    bool player_is_user;
-    struct paddle {
-      unsigned int top = 0;
-      unsigned int bottom = 0;
-    };
-};
 
 /*
 *Purpose: Event handler for a button
@@ -97,10 +43,13 @@ void on_button_b(MicroBitEvent e)
 void pong()
 {
 
+  uBit.display.scroll(player_1.get_score());
+  player_1.adjust_score(1);
+
 }
 int main()
 {
-
+release_fiber();
   uBit.init();
   //uBit.display.scroll("Hello");
   //uBit.display.print("Button B"); I prefer printing to scrolling for readability
@@ -122,9 +71,9 @@ int main()
   uBit.messageBus.listen(MICROBIT_ID_BUTTON_A, MICROBIT_BUTTON_EVT_CLICK, on_button_a);
   uBit.messageBus.listen(MICROBIT_ID_BUTTON_B, MICROBIT_BUTTON_EVT_CLICK, on_button_b);
   while(1){
-    //uBit.sleep(500);//Yield
+  //  uBit.sleep(500);//Yield
     pong();
     uBit.display.image.paste(screen); //update the screen
-  release_fiber(); //Release the fiber in main to return control to scheduler
+//  release_fiber(); //Release the fiber in main to return control to scheduler
 }
 }

@@ -10,10 +10,16 @@ set(YOTTA_AUTO_IOT-EXAMPLE_CPP_FILES
 )
 # force dependency on the config header for cpp files, which CMake otherwise wouldn't track:
 set_property(SOURCE ${YOTTA_AUTO_IOT-EXAMPLE_CPP_FILES} PROPERTY OBJECT_DEPENDS "/home/student/Development/IOT_Challenge_One/build/bbc-microbit-classic-gcc/yotta_config.h")
+set(YOTTA_AUTO_IOT-EXAMPLE_HEADER_FILES
+    "/home/student/Development/IOT_Challenge_One/source/Player.h"
+)
+# force dependency on the config header for header files, which CMake otherwise wouldn't track:
+set_property(SOURCE ${YOTTA_AUTO_IOT-EXAMPLE_HEADER_FILES} PROPERTY OBJECT_DEPENDS "/home/student/Development/IOT_Challenge_One/build/bbc-microbit-classic-gcc/yotta_config.h")
 
 
 add_executable (iot-example
     ${YOTTA_AUTO_IOT-EXAMPLE_CPP_FILES}
+    ${YOTTA_AUTO_IOT-EXAMPLE_HEADER_FILES}
 )
 set_target_properties(iot-example PROPERTIES ENABLE_EXPORTS ON)
 
