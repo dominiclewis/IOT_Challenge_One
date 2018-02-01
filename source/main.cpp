@@ -9,7 +9,7 @@
 #include "MicroBit.h"
 #include "Player.h"
 
-class Player;//Prototype
+//class Player;//Prototype
 MicroBit uBit;//Instance of the MicroBit class
 MicroBitImage screen(5,5); //Create an instance of 5x5 Led Matrix
 Player player_1(true); //instantiate player
