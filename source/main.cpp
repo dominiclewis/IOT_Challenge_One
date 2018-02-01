@@ -94,14 +94,17 @@ void draw_user_paddle()
     }
     else
     {
-      //Turn off the left pixel
-      screen.setPixelValue(player_1.get_paddle_left(),USER_X,0);
-      //Set the px on the right of the player right to be on
-      screen.setPixelValue((player_1.get_paddle_right() +1),USER_X,1);
-      //Set the left value in the player class
-      player_1.set_paddle_left(player_1.get_paddle_right());
-      //Set the right padle right one more
-      player_1.set_paddle_right(player_1.get_paddle_right() +1);
+      if(player_1.get_paddle_right() != MAX_RIGHT_CORD)
+        {
+        //Turn off the left pixel
+        screen.setPixelValue(player_1.get_paddle_left(),USER_X,0);
+        //Set the px on the right of the player right to be on
+        screen.setPixelValue((player_1.get_paddle_right() +1),USER_X,1);
+        //Set the left value in the player class
+        player_1.set_paddle_left(player_1.get_paddle_right());
+        //Set the right padle right one more
+        player_1.set_paddle_right(player_1.get_paddle_right() +1);
+      }
     }
         user_movement.trying_to_move = false; //reset flag
   }
