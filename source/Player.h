@@ -45,12 +45,48 @@ class Player
       }
 
     }
-
+    /*
+    *Purpose: Getter for paddle left value.
+    *Accepts: N/A
+    *Returns: Unsigned int that is the corresponding X axis co-ordinate for left
+    *part of the paddle
+    */
+    unsigned int get_paddle_left()
+    {
+      return paddle_left;
+    }
+    /*
+    *Purpose: Getter for paddle right value.
+    *Accepts: N/A
+    *Returns: Unsigned int that is the corresponding X axis co-ordinate for right
+    *part of the paddle
+    */
+    unsigned int get_paddle_right()
+    {
+      return paddle_right;
+    }
+    /*
+    *Purpose: Setter for paddle left value.
+    *Accepts: unsigned int for the paddle left x axis co-orinate
+    *Returns: void
+    */
+    void set_paddle_left(unsigned int paddle_left_cord)
+    {
+      paddle_left = paddle_left_cord;
+    }
+    /*
+    *Purpose: Setter for paddle right value.
+    *Accepts: unsigned int for the paddle right x axis co-orinate
+    *Returns: void
+    */
+    void set_paddle_right(unsigned int paddle_right_cord)
+    {
+      paddle_right = paddle_right_cord;
+    }
   private: //Private variables
     int player_score = 0;
     bool player_is_user;
-    struct paddle {
-      unsigned int top = 0; //Co-Ord
-      unsigned int bottom = 1; //Co-Ord
-    };
+    unsigned int paddle_left = 0; //Co-Ord
+    unsigned int paddle_right = 1; //Co-Ord
+
 };
