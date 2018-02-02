@@ -11,6 +11,7 @@
 
 
 #define USER_X 4
+#define OPPONENT_X 0
 #define MAX_LEFT_CORD 0
 #define MAX_RIGHT_CORD 4
 #define LEFT_DIR 0x01
@@ -21,6 +22,7 @@ void draw_user_paddle();
 MicroBit uBit;//Instance of the MicroBit class
 MicroBitImage screen(5,5); //Create an instance of 5x5 Led Matrix
 Player player_1(true); //instantiate player
+Player computer_player(false);//Instantiate computer program
 bool new_round = true;
 
 struct movement //Stores related user movement data
@@ -54,12 +56,34 @@ void on_button_b(MicroBitEvent e)
 }
 
 /*
+*Purpose: Draws the opponent paddle on the grid
+*Returns: Void
+*Accepts: N/A
+*/
+void draw_opponent_paddle()
+{
+  uBit.sleep(100);
+  if(new_round)
+  {
+  //  uBit.display.scroll("Test");
+    //draw the paddle for the computer in the top right
+    screen.setPixelValue(3,OPPONENT_X,1);
+    screen.setPixelValue(4,OPPONENT_X,1);
+    //Update the class co-ordinates
+    computer_player.set_paddle_left(3);
+    computer_player.set_paddle_right(4);
+    new_round = false; //The round has been set up now
+  }
+
+}
+/*
 *Purpose: Draws the users paddle on the grid
 *Returns: Void
 *Accepts: N/A
 */
 void draw_user_paddle()
 {
+  uBit.sleep(100);
   if (new_round)
   {
     //Draw the paddle in the bottom left
@@ -68,7 +92,7 @@ void draw_user_paddle()
     //Update the player calss with the co-ordinates
     player_1.set_paddle_left(0);
     player_1.set_paddle_right(1);
-    new_round = false;
+    //new_round = false; //
   }
   //The user has moved
   else if ( (new_round == false) && (user_movement.trying_to_move == true))
@@ -119,6 +143,7 @@ void pong()
 {
   //Create individual fibers to handle actor movement
   create_fiber(draw_user_paddle);
+  create_fiber(draw_opponent_paddle);
   while(player_1.get_score() != 3) //Quit Condition
   {
     uBit.sleep(100);//Yield main fiber (let the user play the game and )
