@@ -9,7 +9,8 @@
 #include "MicroBit.h"
 #include "Player.h"
 
-
+#define BALL_START_X 2
+#define BALL_START_Y 2
 #define USER_X 4
 #define OPPONENT_X 0
 #define MAX_LEFT_CORD 0
@@ -31,6 +32,13 @@ bool trying_to_move; //Is the user trying to move
 int direction; //Which direction
 };
 
+struct ball //Stores information regarding the ball
+{
+  unsigned int ball_x;
+  unsigned int ball_y;
+};
+
+ball game_ball;
 movement user_movement;
 
 /*
@@ -53,6 +61,7 @@ void on_button_b(MicroBitEvent e)
   user_movement.trying_to_move = true;
   user_movement.direction = RIGHT_DIR;
   draw_user_paddle();
+
 }
 
 /*
@@ -70,11 +79,27 @@ void draw_opponent_paddle()
     screen.setPixelValue(3,OPPONENT_X,1);
     screen.setPixelValue(4,OPPONENT_X,1);
     //Update the class co-ordinates
-    computer_player.set_paddle_left(3);
-    computer_player.set_paddle_right(4);
+           computer_player.set_paddle_right                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            (4);
     new_round = false; //The round has been set up now
   }
 
+}
+/*
+*Purpose: Draws the balll
+*Returns: Void
+*Accepts: N/A
+*/
+void draw_ball()
+{
+    uBit.sleep(100); // 0.1 seconds the thread has been slept for
+    if(new_round)
+    {
+      //Draw the ball in the middle of the screen
+      screen.setPixelValue(BALL_START_Y,BALL_START_X,1);
+      //Update the game ball
+      game_ball.ball_x = BALL_START_X;
+      game_ball.ball_y = BALL_START_Y;
+    }
 }
 /*
 *Purpose: Draws the users paddle on the grid
@@ -144,6 +169,7 @@ void pong()
   //Create individual fibers to handle actor movement
   create_fiber(draw_user_paddle);
   create_fiber(draw_opponent_paddle);
+  create_fiber(draw_ball);
   while(player_1.get_score() != 3) //Quit Condition
   {
     uBit.sleep(100);//Yield main fiber (let the user play the game and )
