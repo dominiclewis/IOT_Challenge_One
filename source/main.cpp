@@ -168,8 +168,9 @@ void pong()
 {
   //Create individual fibers to handle actor movement
   create_fiber(draw_user_paddle);
-  create_fiber(draw_opponent_paddle);
   create_fiber(draw_ball);
+  create_fiber(draw_opponent_paddle);
+
   while(player_1.get_score() != 3) //Quit Condition
   {
     uBit.sleep(100);//Yield main fiber (let the user play the game and )
