@@ -12,14 +12,22 @@
 #define BALL_START_X 2
 #define BALL_START_Y 2
 #define USER_X 4
-#define OPPONENT_X 0
+#define OPPONENT_Y 0
 #define MAX_LEFT_CORD 0
 #define MAX_RIGHT_CORD 4
 #define LEFT_DIR 0x01
 #define RIGHT_DIR 0x02
+#define BALL_MOVE_LEFT 22
+#define BALL_MOVE_RIGHT 23
+#define BALL_MOVE_STRAIGHT 24
+#define BALL_MOVE_UP 20
+#define BALL_MOVE_DOWN 21
+#define PADDLE_SPEED 80 //This is how long to sleep
+#define BALL_FALL_SPEED 1200
 
 //Prototypes
 void draw_user_paddle();
+void update_ball();
 MicroBit uBit;//Instance of the MicroBit class
 MicroBitImage screen(5,5); //Create an instance of 5x5 Led Matrix
 Player player_1(true); //instantiate player
@@ -36,6 +44,13 @@ struct ball //Stores information regarding the ball
 {
   unsigned int ball_x;
   unsigned int ball_y;
+  int direction[1]; // 0 = Up/Down, 1 = Right/Left/Straight
+  /*
+  #define BALL_MOVE_LEFT 22
+  #define BALL_MOVE_RIGHT 23
+  #define BALL_MOVE_UP 20
+  #define BALL_MOVE_DOWN 21
+  */
 };
 
 ball game_ball;
@@ -71,16 +86,18 @@ void on_button_b(MicroBitEvent e)
 */
 void draw_opponent_paddle()
 {
-  uBit.sleep(100);
+  uBit.sleep(PADDLE_SPEED); //Slows down paddle
   if(new_round)
   {
   //  uBit.display.scroll("Test");
     //draw the paddle for the computer in the top right
-    screen.setPixelValue(3,OPPONENT_X,1);
-    screen.setPixelValue(4,OPPONENT_X,1);
+    screen.setPixelValue(3,OPPONENT_Y,1);
+    screen.setPixelValue(4,OPPONENT_Y,1);
     //Update the class co-ordinates
-           computer_player.set_paddle_right                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            (4);
+    computer_player.set_paddle_left(3);
+    computer_player.set_paddle_right(4);
     new_round = false; //The round has been set up now
+
   }
 
 }
@@ -91,15 +108,86 @@ void draw_opponent_paddle()
 */
 void draw_ball()
 {
-    uBit.sleep(100); // 0.1 seconds the thread has been slept for
+  while(1)
+  {
+    //uBit.sleep(100);
     if(new_round)
     {
       //Draw the ball in the middle of the screen
-      screen.setPixelValue(BALL_START_Y,BALL_START_X,1);
+      screen.setPixelValue(BALL_START_X,BALL_START_Y,1);
       //Update the game ball
       game_ball.ball_x = BALL_START_X;
       game_ball.ball_y = BALL_START_Y;
+      game_ball.direction[0] = BALL_MOVE_DOWN;
+      game_ball.direction[1] = BALL_MOVE_STRAIGHT;
     }
+    else
+    {
+      update_ball(); //Start the ball moving
+    }
+
+      uBit.sleep(BALL_FALL_SPEED); //Can't sleep at the start as new_round flag wont work
+    }
+}
+/*
+*Purpose: tells the ball where the next pixel it should update is
+*Returns: Void
+*Accepts: N/A
+*/
+void update_ball()
+{
+  //Up/Down?
+  switch(game_ball.direction[0])
+  {
+    case (BALL_MOVE_UP):
+              //turn off the current pixel
+              screen.setPixelValue(game_ball.ball_x,game_ball.ball_y,0);
+              //turn on the above pixel
+              screen.setPixelValue((game_ball.ball_x), (game_ball.ball_y - 1),1 );
+              //Update the ball struct
+              game_ball.ball_y = game_ball.ball_y - 1;
+        break;
+
+    case (BALL_MOVE_DOWN):
+            //turn off the current pixel
+            screen.setPixelValue(game_ball.ball_x,game_ball.ball_y,0);
+            //turn on the above pixel
+            screen.setPixelValue((game_ball.ball_x ), (game_ball.ball_y + 1 ),1 );
+            //Update the ball struct
+            game_ball.ball_y = game_ball.ball_y + 1;
+
+    break;
+}
+//Left/Right
+
+  switch(game_ball.direction[1])
+  {
+    case (BALL_MOVE_RIGHT):
+          //Turn off the current pixel
+          screen.setPixelValue(game_ball.ball_x,game_ball.ball_y,0);
+          //Turn on the pixel to the right
+          screen.setPixelValue((game_ball.ball_x + 1),game_ball.ball_y,1);
+          //Update the ball struct
+          game_ball.ball_x = game_ball.ball_x + 1;
+
+
+    case (BALL_MOVE_LEFT):
+          //Turn off the current pixel
+          screen.setPixelValue(game_ball.ball_x,game_ball.ball_y,0);
+          //Turn on the pixel to the left
+          screen.setPixelValue((game_ball.ball_x - 1),game_ball.ball_y,1);
+          //Update the ball struct
+          game_ball.ball_x = game_ball.ball_x - 1;
+
+
+
+
+
+  }
+
+
+
+
 }
 /*
 *Purpose: Draws the users paddle on the grid
@@ -108,7 +196,7 @@ void draw_ball()
 */
 void draw_user_paddle()
 {
-  uBit.sleep(100);
+  uBit.sleep(PADDLE_SPEED);
   if (new_round)
   {
     //Draw the paddle in the bottom left
@@ -173,7 +261,7 @@ void pong()
 
   while(player_1.get_score() != 3) //Quit Condition
   {
-    uBit.sleep(100);//Yield main fiber (let the user play the game and )
+    uBit.sleep(20);//Yield main fiber (let the user play the game and )
     uBit.display.image.paste(screen); //refresh the screen
   }
 }
@@ -184,7 +272,7 @@ int main()
   uBit.messageBus.listen(MICROBIT_ID_BUTTON_A, MICROBIT_BUTTON_EVT_CLICK, on_button_a);
   uBit.messageBus.listen(MICROBIT_ID_BUTTON_B, MICROBIT_BUTTON_EVT_CLICK, on_button_b);
   while(1){
-    uBit.display.scroll("Pong!!!");
+    //uBit.display.scroll("Pong!!!");
     pong();
 }
   release_fiber();//Release the main fiber
