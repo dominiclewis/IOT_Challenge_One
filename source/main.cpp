@@ -26,6 +26,7 @@
 #define BALL_FALL_SPEED 1200
 
 //Prototypes
+void detect_paddle();
 void draw_user_paddle();
 void update_ball();
 MicroBit uBit;//Instance of the MicroBit class
@@ -42,8 +43,8 @@ int direction; //Which direction
 
 struct ball //Stores information regarding the ball
 {
-  unsigned int ball_x;
-  unsigned int ball_y;
+  int ball_x;
+  int ball_y;
   int direction[1]; // 0 = Up/Down, 1 = Right/Left/Straight
   /*
   #define BALL_MOVE_LEFT 22
@@ -78,6 +79,136 @@ void on_button_b(MicroBitEvent e)
   draw_user_paddle();
 
 }
+/*
+*Purpose: Detects whether the ball is going to colide with a paddle
+*Returns: Void
+*Accepts: N/A
+*/
+void detect_paddle()
+{
+  //If the next LED is a paddle then the direction needs to change
+  switch(game_ball.direction[0])
+  {
+    case (BALL_MOVE_DOWN):
+    //Check if moving in a certain direction
+      if(game_ball.direction[1] != BALL_MOVE_STRAIGHT)
+      {
+        if (game_ball.direction[1] == BALL_MOVE_LEFT])
+        {
+          //CHECK LEFT DOWN
+          if (((game_ball.ball_y + 1) == player_1.get_paddle_left() ) &&
+          (game_ball.ball_x - 1 ) == player_1.get_paddle_left())
+          {
+            //Reflect Left
+            game_ball.direction[0] = BALL_MOVE_UP;
+            game_ball.direction[1] = BALL_MOVE_LEFT;
+          }
+          else if (((game_ball.ball_y + 1) == player_1.get_paddle_right() ) &&
+              (game_ball.ball_x - 1 ) == player_1.get_paddle_right())
+              {
+                //Reflect right
+                game_ball.direction[0] = BALL_MOVE_UP;
+                game_ball.direction[1] = BALL_MOVE_RIGHT;
+              }
+
+        }
+        else
+        {
+          // It's going right
+          //CHECK right DOWN
+          if (((game_ball.ball_y + 1) == player_1.get_paddle_left() ) &&
+          (game_ball.ball_x + 1 ) == player_1.get_paddle_left())
+          {
+            //Reflect Left
+            game_ball.direction[0] = BALL_MOVE_UP;
+            game_ball.direction[1] = BALL_MOVE_LEFT;
+          }
+          else if (((game_ball.ball_y + 1) == player_1.get_paddle_right() ) &&
+              (game_ball.ball_x + 1 ) == player_1.get_paddle_right())
+              {
+                //Reflect right
+                game_ball.direction[0] = BALL_MOVE_UP;
+                game_ball.direction[1] = BALL_MOVE_RIGHT;
+              }
+        }
+      }
+      else
+      {
+        // just check with the [0]
+        if (game_ball.ball_y + 1) == player_1.get_paddle_left())
+        {
+          game_ball.direction[0] = BALL_MOVE_UP;
+          game_ball.direction[1] = BALL_MOVE_LEFT;
+        }
+        else if (game_ball.ball_y + 1) == player_1.get_paddle_right()){
+          //REFLECT RIGHT
+          game_ball.direction[0] = BALL_MOVE_UP;
+          game_ball.direction[1] = BALL_MOVE_RIGHT;
+        }
+      }
+    break;
+    case (BALL_MOVE_UP):
+    //Check if moving in a certain direction
+      if(game_ball.direction[1] != BALL_MOVE_STRAIGHT)
+      {
+        if (game_ball.direction[1] == BALL_MOVE_LEFT])
+        {
+          //CHECK LEFT UP
+          if (((game_ball.ball_y - 1) == computer_player.get_paddle_left() ) &&
+          (game_ball.ball_x - 1 ) == computer_player.get_paddle_left())
+          {
+            //Reflect Left
+            game_ball.direction[0] = BALL_MOVE_DOWN;
+            game_ball.direction[1] = BALL_MOVE_LEFT;
+          }
+          else if (((game_ball.ball_y - 1) == computer_player.get_paddle_right() ) &&
+              (game_ball.ball_x - 1 ) == computer_player.get_paddle_right())
+              {
+                //Reflect right
+                game_ball.direction[0] = BALL_MOVE_DOWN;
+                game_ball.direction[1] = BALL_MOVE_RIGHT;
+              }
+
+        }
+        else
+        {
+          // It's going right
+          //CHECK right UP
+          if (((game_ball.ball_y - 1) == computer_player.get_paddle_left() ) &&
+          (game_ball.ball_x + 1 ) == computer_player.get_paddle_left())
+          {
+            //Reflect Left
+            game_ball.direction[0] = BALL_MOVE_DOWN;
+            game_ball.direction[1] = BALL_MOVE_LEFT;
+          }
+          else if (((game_ball.ball_y - 1) == computer_player.get_paddle_right() ) &&
+              (game_ball.ball_x + 1 ) == computer_player.get_paddle_right())
+              {
+                //Reflect right
+                game_ball.direction[0] = BALL_MOVE_DOWN;
+                game_ball.direction[1] = BALL_MOVE_RIGHT;
+              }
+        }
+      }
+      else
+      {
+        // just check with the [0]
+        if ((game_ball.ball_y - 1) == computer_player.get_paddle_left())
+        {
+          game_ball.direction[0] = BALL_MOVE_DOWN;
+          game_ball.direction[1] = BALL_MOVE_LEFT;
+        }
+        else if ((game_ball.ball_y - 1) == computer_player.get_paddle_right()){
+          //REFLECT RIGHT
+          game_ball.direction[0] = BALL_MOVE_DOWN;
+          game_ball.direction[1] = BALL_MOVE_RIGHT;
+        }
+      }
+    break;
+  }
+
+}
+
 
 /*
 *Purpose: Draws the opponent paddle on the grid
@@ -123,7 +254,9 @@ void draw_ball()
     }
     else
     {
-      update_ball(); //Start the ball moving
+      detect_paddle();
+      update_ball(); //Move the ball
+
     }
 
       uBit.sleep(BALL_FALL_SPEED); //Can't sleep at the start as new_round flag wont work
@@ -155,7 +288,6 @@ void update_ball()
             screen.setPixelValue((game_ball.ball_x ), (game_ball.ball_y + 1 ),1 );
             //Update the ball struct
             game_ball.ball_y = game_ball.ball_y + 1;
-
     break;
 }
 //Left/Right
@@ -169,6 +301,7 @@ void update_ball()
           screen.setPixelValue((game_ball.ball_x + 1),game_ball.ball_y,1);
           //Update the ball struct
           game_ball.ball_x = game_ball.ball_x + 1;
+          break;
 
 
     case (BALL_MOVE_LEFT):
@@ -178,10 +311,7 @@ void update_ball()
           screen.setPixelValue((game_ball.ball_x - 1),game_ball.ball_y,1);
           //Update the ball struct
           game_ball.ball_x = game_ball.ball_x - 1;
-
-
-
-
+          break;
 
   }
 
