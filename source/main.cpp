@@ -25,7 +25,10 @@
 #define BALL_MOVE_UP 20
 #define BALL_MOVE_DOWN 21
 #define PADDLE_SPEED 80 //This is how long to sleep
+#define OPPONENT_PADDLE_SPEED 900
 #define BALL_FALL_SPEED 1200
+
+
 
 //Prototypes
 void detect_paddle();
@@ -262,71 +265,70 @@ void detect_paddle()
 */
 void draw_opponent_paddle()
 {
-  uBit.sleep(PADDLE_SPEED); //Slows down paddle
-  if(new_round)
-  {
 
-    //draw the paddle for the computer in the top right
-    screen.setPixelValue(OPPONENT_START_X,OPPONENT_Y,1);
-    screen.setPixelValue(OPPONENT_START_X + 1,OPPONENT_Y,1);
-    //Update the class co-ordinates
-    computer_player.set_paddle_left(OPPONENT_START_X);
-    computer_player.set_paddle_right(OPPONENT_START_X + 1);
-    new_round = false; //The round has been set up now
-  }
-  else if  (new_round == false)
+  while(1)
   {
-    //Check if the ball is coming towards the computer
-    if (game_ball.direction[0] == BALL_MOVE_UP)
+    if(new_round)
     {
-      computer_movement.trying_to_move = true;
-      if ((game_ball.ball_x - 1) < computer_player.get_paddle_left())
-      {
-        //go left
-        computer_movement.direction = LEFT_DIR;
-      }
-      else if((game_ball.ball_x + 1) > computer_player.get_paddle_right())
-      {
-        //go right
-        computer_movement.direction = RIGHT_DIR;
-      }
+      //draw the paddle for the computer in the top right
+      screen.setPixelValue(OPPONENT_START_X,OPPONENT_Y,1);
+      screen.setPixelValue(OPPONENT_START_X + 1 ,OPPONENT_Y,1);
+      //Update the class co-ordinates
+      computer_player.set_paddle_left(OPPONENT_START_X);
+      computer_player.set_paddle_right(OPPONENT_START_X + 1);
+
     }
-    if (computer_movement.trying_to_move == true)
+    else if (new_round == false)
+    {
+      //Check if the ball is coming towards the computer
+      if (game_ball.direction[0] == BALL_MOVE_UP)
       {
-      if (computer_movement.direction == LEFT_DIR )
-      {
-
-
-        if (computer_player.get_paddle_left() != MAX_LEFT_CORD ) //Check if we're at max left
+        computer_movement.trying_to_move = true;
+        if ((game_ball.ball_x ) < computer_player.get_paddle_left())
         {
-          //set the right px to turn off
-          screen.setPixelValue(computer_player.get_paddle_right(),OPPONENT_Y,0);
-          //set the px on the left of the player left to onUSER_X
-          screen.setPixelValue((computer_player.get_paddle_left() -1 ),OPPONENT_Y,1);
-          //Set the right value in the player class
-          computer_player.set_paddle_right(computer_player.get_paddle_left());
-          //Set the left paddle_right
-          computer_player.set_paddle_left(computer_player.get_paddle_left() -1);
-
-
+          //go left
+          computer_movement.direction = LEFT_DIR;
+        }
+        else if((game_ball.ball_x ) > computer_player.get_paddle_right())
+        {
+          //go right
+          computer_movement.direction = RIGHT_DIR;
         }
       }
-      else
-      {
-        if(computer_player.get_paddle_right() != MAX_RIGHT_CORD)
+      if (computer_movement.trying_to_move)
+        {
+        if (computer_movement.direction == LEFT_DIR )
+        {
+          if (computer_player.get_paddle_left() != MAX_LEFT_CORD ) //Check if we're at max left
           {
-          //Turn off the left pixel
-          screen.setPixelValue(computer_player.get_paddle_left(),OPPONENT_Y,0);
-          //Set the px on the right of the player right to be on
-          screen.setPixelValue((computer_player.get_paddle_right() +1),OPPONENT_Y,1);
-          //Set the left value in the player class
-          computer_player.set_paddle_left(computer_player.get_paddle_right());
-          //Set the right padle right one more
-          computer_player.set_paddle_right(computer_player.get_paddle_right() +1);
+            //set the right px to turn off
+            screen.setPixelValue(computer_player.get_paddle_right(),OPPONENT_Y,0);
+            //set the px on the left of the player left to onUSER_X
+            screen.setPixelValue((computer_player.get_paddle_left() -1 ),OPPONENT_Y,1);
+            //Set the right value in the player class
+            computer_player.set_paddle_right(computer_player.get_paddle_left());
+            //Set the left paddle_right
+            computer_player.set_paddle_left(computer_player.get_paddle_left() -1);
+          }
         }
+        else
+        {
+          if(computer_player.get_paddle_right() != MAX_RIGHT_CORD)
+            {
+            //Turn off the left pixel
+            screen.setPixelValue(computer_player.get_paddle_left(),OPPONENT_Y,0);
+            //Set the px on the right of the player right to be on
+            screen.setPixelValue((computer_player.get_paddle_right() +1),OPPONENT_Y,1);
+            //Set the left value in the player class
+            computer_player.set_paddle_left(computer_player.get_paddle_right());
+            //Set the right padle right one more
+            computer_player.set_paddle_right(computer_player.get_paddle_right() +1);
+          }
+        }
+            computer_movement.trying_to_move = false; //reset flag
       }
-          computer_movement.trying_to_move = false; //reset flag
     }
+    uBit.sleep(OPPONENT_PADDLE_SPEED);//Slow down paddle
   }
 }
 /*
@@ -336,10 +338,11 @@ void draw_opponent_paddle()
 */
 void draw_ball()
 {
+  bool skip = false;
   while(1)
   {
     //uBit.sleep(100);
-    if(new_round)
+    if((new_round) && (skip == false))
     {
       //Draw the ball in the middle of the screen
       screen.setPixelValue(BALL_START_X,BALL_START_Y,1);
@@ -348,16 +351,19 @@ void draw_ball()
       game_ball.ball_y = BALL_START_Y;
       game_ball.direction[0] = BALL_MOVE_DOWN;
       game_ball.direction[1] = BALL_MOVE_STRAIGHT;
+      skip = true;//Do not re-initiliase the ball
+
     }
     else
     {
+      new_round = false;
       detect_paddle();
       detect_wall();
       update_ball(); //Move the ball
 
     }
 
-      uBit.sleep(BALL_FALL_SPEED); //Can't sleep at the start as new_round flag wont work
+      uBit.sleep(BALL_FALL_SPEED ); //Can't sleep at the start as new_round flag wont work
     }
 }
 /*
