@@ -156,6 +156,7 @@ void detect_wall()
 
       }
 
+
     }
 
 
@@ -241,14 +242,14 @@ void detect_paddle()
           {
             //Reflect Left
             game_ball.direction[0] = BALL_MOVE_DOWN;
-            game_ball.direction[1] = BALL_MOVE_RIGHT;
+            game_ball.direction[1] = BALL_MOVE_LEFT;
           }
           else if (((game_ball.ball_y - 1) == OPPONENT_Y ) &&
               (game_ball.ball_x - 1 ) == computer_player.get_paddle_right())
               {
                 //Reflect right
                 game_ball.direction[0] = BALL_MOVE_DOWN;
-                game_ball.direction[1] = BALL_MOVE_LEFT;
+                game_ball.direction[1] = BALL_MOVE_RIGHT;
               }
 
         }
@@ -261,14 +262,14 @@ void detect_paddle()
           {
             //Reflect Left
             game_ball.direction[0] = BALL_MOVE_DOWN;
-            game_ball.direction[1] = BALL_MOVE_RIGHT;//Mirror
+            game_ball.direction[1] = BALL_MOVE_LEFT;
           }
           else if (((game_ball.ball_y - 1) == OPPONENT_Y ) &&
               (game_ball.ball_x + 1 ) == computer_player.get_paddle_right())
               {
                 //Reflect right
                 game_ball.direction[0] = BALL_MOVE_DOWN;
-                game_ball.direction[1] = BALL_MOVE_LEFT;
+                game_ball.direction[1] = BALL_MOVE_RIGHT;
               }
         }
       }
@@ -278,13 +279,13 @@ void detect_paddle()
         if (((game_ball.ball_y - 1) == OPPONENT_Y) && (game_ball.ball_x == computer_player.get_paddle_left()))
         {
           game_ball.direction[0] = BALL_MOVE_DOWN;
-          game_ball.direction[1] = BALL_MOVE_RIGHT;
+          game_ball.direction[1] = BALL_MOVE_LEFT;
         }
         else if (((game_ball.ball_y - 1) == OPPONENT_Y) && (game_ball.ball_x == computer_player.get_paddle_right()))
           //REFLECT RIGHT
           {
           game_ball.direction[0] = BALL_MOVE_DOWN;
-          game_ball.direction[1] = BALL_MOVE_LEFT;
+          game_ball.direction[1] = BALL_MOVE_RIGHT;
         }
       }
     break;
@@ -386,14 +387,14 @@ void draw_ball()
       game_ball.direction[0] = BALL_MOVE_DOWN;
       game_ball.direction[1] = BALL_MOVE_STRAIGHT;
       skip = true;//Do not re-initiliase the ball
-      uBit.sleep(500);
+
 
     }
     else
     {
       new_round = false;
-      detect_paddle();
       detect_wall();
+      detect_paddle();
       update_ball(); //Move the ball
 
     }
@@ -453,9 +454,6 @@ void update_ball()
           break;
 
   }
-
-
-
 
 }
 /*
@@ -527,6 +525,7 @@ void pong()
   create_fiber(draw_user_paddle);
   create_fiber(draw_opponent_paddle);
   create_fiber(draw_ball);
+
 
 
   while(player_1.get_score() != 3) //Quit Condition
