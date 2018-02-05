@@ -195,13 +195,14 @@ void detect_paddle()
       else
       {
         // just check with the [0]
-        if ((game_ball.ball_y - 1) == computer_player.get_paddle_left())
+        if (((game_ball.ball_y - 1) == USER_Y) && (game_ball.ball_x == computer_player.get_paddle_left()))
         {
           game_ball.direction[0] = BALL_MOVE_DOWN;
           game_ball.direction[1] = BALL_MOVE_LEFT;
         }
-        else if ((game_ball.ball_y - 1) == computer_player.get_paddle_right()){
+        else if (((game_ball.ball_y - 1) == USER_Y) && (game_ball.ball_x == computer_player.get_paddle_right()))
           //REFLECT RIGHT
+          {
           game_ball.direction[0] = BALL_MOVE_DOWN;
           game_ball.direction[1] = BALL_MOVE_RIGHT;
         }
