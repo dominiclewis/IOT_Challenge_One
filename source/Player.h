@@ -48,7 +48,7 @@ class Player
     /*
     *Purpose: Getter for paddle left value.
     *Accepts: N/A
-    *Returns: Unsigned int that is the corresponding X axis co-ordinate for left
+    *Returns:  int that is the corresponding X axis co-ordinate for left
     *part of the paddle
     */
      int get_paddle_left()
@@ -58,7 +58,7 @@ class Player
     /*
     *Purpose: Getter for paddle right value.
     *Accepts: N/A
-    *Returns: Unsigned int that is the corresponding X axis co-ordinate for right
+    *Returns:  int that is the corresponding X axis co-ordinate for right
     *part of the paddle
     */
      int get_paddle_right()
@@ -67,7 +67,7 @@ class Player
     }
     /*
     *Purpose: Setter for paddle left value.
-    *Accepts: unsigned int for the paddle left x axis co-orinate
+    *Accepts:  int for the paddle left x axis co-orinate
     *Returns: void
     */
     void set_paddle_left( int paddle_left_cord)
@@ -76,7 +76,7 @@ class Player
     }
     /*
     *Purpose: Setter for paddle right value.
-    *Accepts: unsigned int for the paddle right x axis co-orinate
+    *Accepts:  int for the paddle right x axis co-orinate
     *Returns: void
     */
     void set_paddle_right( int paddle_right_cord)
