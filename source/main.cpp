@@ -11,7 +11,8 @@
 
 #define BALL_START_X 2
 #define BALL_START_Y 2
-#define USER_X 4
+#define USER_START_X 0 //Left Paddle
+#define USER_Y 4
 #define OPPONENT_Y 0
 #define MAX_LEFT_CORD 0
 #define MAX_RIGHT_CORD 4
@@ -93,7 +94,7 @@ void detect_paddle()
     //Check if moving in a certain direction
       if(game_ball.direction[1] != BALL_MOVE_STRAIGHT)
       {
-        if (game_ball.direction[1] == BALL_MOVE_LEFT])
+        if (game_ball.direction[1] == BALL_MOVE_LEFT)
         {
           //CHECK LEFT DOWN
           if (((game_ball.ball_y + 1) == player_1.get_paddle_left() ) &&
@@ -135,12 +136,12 @@ void detect_paddle()
       else
       {
         // just check with the [0]
-        if (game_ball.ball_y + 1) == player_1.get_paddle_left())
+        if ((game_ball.ball_y + 1) == player_1.get_paddle_left())
         {
           game_ball.direction[0] = BALL_MOVE_UP;
           game_ball.direction[1] = BALL_MOVE_LEFT;
         }
-        else if (game_ball.ball_y + 1) == player_1.get_paddle_right()){
+        else if ((game_ball.ball_y + 1) == player_1.get_paddle_right()){
           //REFLECT RIGHT
           game_ball.direction[0] = BALL_MOVE_UP;
           game_ball.direction[1] = BALL_MOVE_RIGHT;
@@ -151,7 +152,7 @@ void detect_paddle()
     //Check if moving in a certain direction
       if(game_ball.direction[1] != BALL_MOVE_STRAIGHT)
       {
-        if (game_ball.direction[1] == BALL_MOVE_LEFT])
+        if (game_ball.direction[1] == BALL_MOVE_LEFT)
         {
           //CHECK LEFT UP
           if (((game_ball.ball_y - 1) == computer_player.get_paddle_left() ) &&
@@ -330,11 +331,11 @@ void draw_user_paddle()
   if (new_round)
   {
     //Draw the paddle in the bottom left
-    screen.setPixelValue(0,USER_X,1);
-    screen.setPixelValue(1,USER_X,1);
+    screen.setPixelValue(USER_START_X,USER_Y,1);
+    screen.setPixelValue(1,USER_Y,1);
     //Update the player calss with the co-ordinates
-    player_1.set_paddle_left(0);
-    player_1.set_paddle_right(1);
+    player_1.set_paddle_left(USER_START_X);
+    player_1.set_paddle_right(USER_START_X + 1);
     //new_round = false; //
   }
   //The user has moved
@@ -348,9 +349,9 @@ void draw_user_paddle()
       if (player_1.get_paddle_left() != MAX_LEFT_CORD ) //Check if we're at max left
       {
         //set the right px to turn off
-        screen.setPixelValue(player_1.get_paddle_right(),USER_X,0);
-        //set the px on the left of the player left to on
-        screen.setPixelValue((player_1.get_paddle_left() -1 ),USER_X,1);
+        screen.setPixelValue(player_1.get_paddle_right(),USER_Y,0);
+        //set the px on the left of the player left to onUSER_X
+        screen.setPixelValue((player_1.get_paddle_left() -1 ),USER_Y,1);
         //Set the right value in the player class
         player_1.set_paddle_right(player_1.get_paddle_left());
         //Set the left paddle_right
@@ -364,9 +365,9 @@ void draw_user_paddle()
       if(player_1.get_paddle_right() != MAX_RIGHT_CORD)
         {
         //Turn off the left pixel
-        screen.setPixelValue(player_1.get_paddle_left(),USER_X,0);
+        screen.setPixelValue(player_1.get_paddle_left(),USER_Y,0);
         //Set the px on the right of the player right to be on
-        screen.setPixelValue((player_1.get_paddle_right() +1),USER_X,1);
+        screen.setPixelValue((player_1.get_paddle_right() +1),USER_Y,1);
         //Set the left value in the player class
         player_1.set_paddle_left(player_1.get_paddle_right());
         //Set the right padle right one more
