@@ -93,8 +93,8 @@ void on_button_b(MicroBitEvent e)
 void detect_wall()
 {
   //Check for left wall
-  //  if (game_ball.direction[0] == BALL_MOVE_UP)
-    //  {
+    if (game_ball.direction[0] == BALL_MOVE_UP)
+      {
         if (game_ball.direction[1] == BALL_MOVE_LEFT)
         {
           if(((game_ball.ball_y + 1 )== 0) ||((game_ball.ball_y + 1 )== 1) || ((game_ball.ball_y + 1 )== 2) ||
@@ -122,10 +122,44 @@ void detect_wall()
           }
 
         }
-      //}
+
+      }
+      else
+      {
+        if (game_ball.direction[1] == BALL_MOVE_LEFT)
+        {
+          if(((game_ball.ball_y - 1 )== 0) ||((game_ball.ball_y - 1 )== 1) || ((game_ball.ball_y + 1 )== 2) ||
+          ((game_ball.ball_y - 1 )== 3)||((game_ball.ball_y - 1 )== 4)) //Y's which could be out of bounds
+          {
+            if((game_ball.ball_x - 1) == MAX_LEFT_CORD - 1)
+            {
+              //Reflect as out of bounds
+              game_ball.direction[1] = BALL_MOVE_RIGHT;
+            }
+          }
+          //if next light is +1 on middle three x
+        }
+        else if(game_ball.direction[1] == BALL_MOVE_RIGHT)
+        {
+          if(((game_ball.ball_y - 1 )== 0) ||((game_ball.ball_y - 1 )== 1) || ((game_ball.ball_y + 1 )== 2) ||
+          ((game_ball.ball_y - 1 )== 3)||((game_ball.ball_y - 1 )== 4)) //Y's which could be out of bounds
+          {
+              if((game_ball.ball_x + 1) == MAX_RIGHT_CORD + 1)
+              {
+                game_ball.direction[1] = BALL_MOVE_LEFT;
+              }
 
 
-}
+          }
+
+        }
+
+      }
+
+    }
+
+
+
 /*
 *Purpose: Detects whether the ball is going to colide with a paddle
 *Returns: Void
@@ -142,15 +176,15 @@ void detect_paddle()
       {
         if (game_ball.direction[1] == BALL_MOVE_LEFT)
         {
-          //CHECK LEFT DOWN
-          if (((game_ball.ball_y + 1) == player_1.get_paddle_left() ) &&
+          //CHECK LEFT DOWNtrying_to_move
+          if (((game_ball.ball_y + 1) == USER_Y ) &&
           (game_ball.ball_x - 1 ) == player_1.get_paddle_left())
           {
             //Reflect Left
             game_ball.direction[0] = BALL_MOVE_UP;
             game_ball.direction[1] = BALL_MOVE_LEFT;
           }
-          else if (((game_ball.ball_y + 1) == player_1.get_paddle_right() ) &&
+          else if (((game_ball.ball_y + 1) == USER_Y ) &&
               (game_ball.ball_x - 1 ) == player_1.get_paddle_right())
               {
                 //Reflect right
@@ -163,14 +197,14 @@ void detect_paddle()
         {
           // It's going right
           //CHECK right DOWN
-          if (((game_ball.ball_y + 1) == player_1.get_paddle_left() ) &&
+          if (((game_ball.ball_y + 1) == USER_Y ) &&
           (game_ball.ball_x + 1 ) == player_1.get_paddle_left())
           {
             //Reflect Left
             game_ball.direction[0] = BALL_MOVE_UP;
             game_ball.direction[1] = BALL_MOVE_LEFT;
           }
-          else if (((game_ball.ball_y + 1) == player_1.get_paddle_right() ) &&
+          else if (((game_ball.ball_y + 1) == USER_Y ) &&
               (game_ball.ball_x + 1 ) == player_1.get_paddle_right())
               {
                 //Reflect right
@@ -202,19 +236,19 @@ void detect_paddle()
         if (game_ball.direction[1] == BALL_MOVE_LEFT)
         {
           //CHECK LEFT UP
-          if (((game_ball.ball_y - 1) == computer_player.get_paddle_left() ) &&
+          if (((game_ball.ball_y - 1) == OPPONENT_Y ) &&
           (game_ball.ball_x - 1 ) == computer_player.get_paddle_left())
           {
             //Reflect Left
             game_ball.direction[0] = BALL_MOVE_DOWN;
-            game_ball.direction[1] = BALL_MOVE_LEFT;
+            game_ball.direction[1] = BALL_MOVE_RIGHT;
           }
-          else if (((game_ball.ball_y - 1) == computer_player.get_paddle_right() ) &&
+          else if (((game_ball.ball_y - 1) == OPPONENT_Y ) &&
               (game_ball.ball_x - 1 ) == computer_player.get_paddle_right())
               {
                 //Reflect right
                 game_ball.direction[0] = BALL_MOVE_DOWN;
-                game_ball.direction[1] = BALL_MOVE_RIGHT;
+                game_ball.direction[1] = BALL_MOVE_LEFT;
               }
 
         }
@@ -222,35 +256,35 @@ void detect_paddle()
         {
           // It's going right
           //CHECK right UP
-          if (((game_ball.ball_y - 1) == computer_player.get_paddle_left() ) &&
+          if (((game_ball.ball_y - 1) == OPPONENT_Y ) &&
           (game_ball.ball_x + 1 ) == computer_player.get_paddle_left())
           {
             //Reflect Left
             game_ball.direction[0] = BALL_MOVE_DOWN;
-            game_ball.direction[1] = BALL_MOVE_LEFT;
+            game_ball.direction[1] = BALL_MOVE_RIGHT;//Mirror
           }
-          else if (((game_ball.ball_y - 1) == computer_player.get_paddle_right() ) &&
+          else if (((game_ball.ball_y - 1) == OPPONENT_Y ) &&
               (game_ball.ball_x + 1 ) == computer_player.get_paddle_right())
               {
                 //Reflect right
                 game_ball.direction[0] = BALL_MOVE_DOWN;
-                game_ball.direction[1] = BALL_MOVE_RIGHT;
+                game_ball.direction[1] = BALL_MOVE_LEFT;
               }
         }
       }
       else
       {
         // just check with the [0]
-        if (((game_ball.ball_y - 1) == USER_Y) && (game_ball.ball_x == computer_player.get_paddle_left()))
+        if (((game_ball.ball_y - 1) == OPPONENT_Y) && (game_ball.ball_x == computer_player.get_paddle_left()))
         {
           game_ball.direction[0] = BALL_MOVE_DOWN;
-          game_ball.direction[1] = BALL_MOVE_LEFT;
+          game_ball.direction[1] = BALL_MOVE_RIGHT;
         }
-        else if (((game_ball.ball_y - 1) == USER_Y) && (game_ball.ball_x == computer_player.get_paddle_right()))
+        else if (((game_ball.ball_y - 1) == OPPONENT_Y) && (game_ball.ball_x == computer_player.get_paddle_right()))
           //REFLECT RIGHT
           {
           game_ball.direction[0] = BALL_MOVE_DOWN;
-          game_ball.direction[1] = BALL_MOVE_RIGHT;
+          game_ball.direction[1] = BALL_MOVE_LEFT;
         }
       }
     break;
@@ -341,7 +375,7 @@ void draw_ball()
   bool skip = false;
   while(1)
   {
-    //uBit.sleep(100);
+
     if((new_round) && (skip == false))
     {
       //Draw the ball in the middle of the screen
@@ -352,6 +386,7 @@ void draw_ball()
       game_ball.direction[0] = BALL_MOVE_DOWN;
       game_ball.direction[1] = BALL_MOVE_STRAIGHT;
       skip = true;//Do not re-initiliase the ball
+      uBit.sleep(500);
 
     }
     else
