@@ -98,8 +98,7 @@ void detect_wall()
       {
         if (game_ball.direction[1] == BALL_MOVE_LEFT)
         {
-          if(((game_ball.ball_y - 1 )== 0) ||((game_ball.ball_y - 1 )== 1) || ((game_ball.ball_y - 1 )== 2) ||
-          ((game_ball.ball_y - 1 )== 3)||((game_ball.ball_y - 1 )== 4)) //Y's which could be out of bounds
+          if(((game_ball.ball_y - 1 ) >= 0) && ((game_ball.ball_y - 1)<= 4)) //Y's which could be out of bounds
           {
             if((game_ball.ball_x - 1) < MAX_LEFT_CORD )
             {
@@ -114,8 +113,7 @@ void detect_wall()
         }
         else if(game_ball.direction[1] == BALL_MOVE_RIGHT)
         {
-          if(((game_ball.ball_y - 1 )== 0) ||((game_ball.ball_y - 1 )== 1) || ((game_ball.ball_y - 1 )== 2) ||
-          ((game_ball.ball_y - 1 )== 3)||((game_ball.ball_y - 1 )== 4)) //Y's which could be out of bounds
+          if(((game_ball.ball_y - 1 ) >= 0) && ((game_ball.ball_y - 1)<= 4)) //Y's which could be out of bounds
           {
               if((game_ball.ball_x + 1) > MAX_RIGHT_CORD )
               {
@@ -124,19 +122,14 @@ void detect_wall()
                 direction = BALL_MOVE_LEFT;
                 found = true;
               }
-
-
           }
-
         }
-
       }
-      else//Going down
+      else if (game_ball.direction[1] == BALL_MOVE_DOWN)//Going down
       {
         if (game_ball.direction[1] == BALL_MOVE_LEFT)
         {
-          if(((game_ball.ball_y + 1 )== 0) ||((game_ball.ball_y + 1 )== 1) || ((game_ball.ball_y + 1 )== 2) ||
-          ((game_ball.ball_y + 1 )== 3)||((game_ball.ball_y + 1 )== 4)) //Y's which could be out of bounds
+            if(((game_ball.ball_y + 1 ) >= 0) && ((game_ball.ball_y + 1)<= 4)) //Y's which could be out of bounds
           {
             if((game_ball.ball_x - 1) < MAX_LEFT_CORD )
             {
@@ -150,21 +143,15 @@ void detect_wall()
         }
         else if(game_ball.direction[1] == BALL_MOVE_RIGHT)
         {
-          if(((game_ball.ball_y + 1 )== 0) ||((game_ball.ball_y + 1 )== 1) || ((game_ball.ball_y + 1 )== 2) ||
-          ((game_ball.ball_y + 1 )== 3)||((game_ball.ball_y + 1 )== 4)) //Y's which could be out of bounds
+              if(((game_ball.ball_y + 1 ) >= 0) && ((game_ball.ball_y + 1)<= 4)) //Y's which could be out of bounds
           {
               if((game_ball.ball_x + 1) > MAX_RIGHT_CORD)
               {
                 direction = BALL_MOVE_LEFT;
                 found = true;
-
               }
-
-
           }
-
         }
-
       }
       if (found)
       {
@@ -317,6 +304,7 @@ void detect_paddle()
         }
       }
     break;
+
   }
 
 }
@@ -422,7 +410,7 @@ void draw_ball()
     {
       new_round = false;
       detect_wall();
-    detect_paddle();
+     detect_paddle();
 
       update_ball(); //Move the ball
 
@@ -444,18 +432,13 @@ void update_ball()
     case (BALL_MOVE_UP):
               //turn off the current pixel
               screen.setPixelValue(game_ball.ball_x,game_ball.ball_y,0);
-              //turn on the above pixel
-              screen.setPixelValue((game_ball.ball_x), (game_ball.ball_y - 1),1 );
-              //Update the ball struct
               game_ball.ball_y = game_ball.ball_y - 1;
         break;
 
     case (BALL_MOVE_DOWN):
             //turn off the current pixel
             screen.setPixelValue(game_ball.ball_x,game_ball.ball_y,0);
-            //turn on the above pixel
-            screen.setPixelValue((game_ball.ball_x ), (game_ball.ball_y + 1 ),1 );
-            //Update the ball struct
+            //turn on the below pixel
             game_ball.ball_y = game_ball.ball_y + 1;
     break;
 }
@@ -463,23 +446,37 @@ void update_ball()
 
   switch(game_ball.direction[1])
   {
+
+    case(BALL_MOVE_STRAIGHT):
+        if (game_ball.direction[0] == BALL_MOVE_DOWN)
+        {
+          //Turn on below pixel
+        screen.setPixelValue((game_ball.ball_x ), (game_ball.ball_y ),1 );
+
+        }
+        else if (game_ball.direction[0] == BALL_MOVE_UP)
+        {
+          //Turn on Above Pixel
+          screen.setPixelValue((game_ball.ball_x ), (game_ball.ball_y ),1 );
+
+        }
+          break;
     case (BALL_MOVE_RIGHT):
           //Turn off the current pixel
-          screen.setPixelValue(game_ball.ball_x,game_ball.ball_y,0);
-          //Turn on the pixel to the right
-          screen.setPixelValue((game_ball.ball_x + 1),game_ball.ball_y,1);
+
           //Update the ball struct
           game_ball.ball_x = game_ball.ball_x + 1;
+          //Turn on the pixel to the right
+          screen.setPixelValue((game_ball.ball_x),game_ball.ball_y,1);
+
           break;
 
 
     case (BALL_MOVE_LEFT):
-          //Turn off the current pixel
-          screen.setPixelValue(game_ball.ball_x,game_ball.ball_y,0);
-          //Turn on the pixel to the left
-          screen.setPixelValue((game_ball.ball_x - 1),game_ball.ball_y,1);
           //Update the ball struct
           game_ball.ball_x = game_ball.ball_x - 1;
+          //Turn on the pixel to the left
+          screen.setPixelValue((game_ball.ball_x ),game_ball.ball_y,1);
           break;
 
   }
