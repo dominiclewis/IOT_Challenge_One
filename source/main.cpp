@@ -93,29 +93,37 @@ void on_button_b(MicroBitEvent e)
 void detect_wall()
 {
   //Check for left wall
+  int direction = -9;
+  bool found = false;
     if (game_ball.direction[0] == BALL_MOVE_UP)
       {
         if (game_ball.direction[1] == BALL_MOVE_LEFT)
         {
-          if(((game_ball.ball_y + 1 )== 0) ||((game_ball.ball_y + 1 )== 1) || ((game_ball.ball_y + 1 )== 2) ||
-          ((game_ball.ball_y + 1 )== 3)||((game_ball.ball_y + 1 )== 4)) //Y's which could be out of bounds
+          if(((game_ball.ball_y - 1 )== 0) ||((game_ball.ball_y - 1 )== 1) || ((game_ball.ball_y - 1 )== 2) ||
+          ((game_ball.ball_y - 1 )== 3)||((game_ball.ball_y - 1 )== 4)) //Y's which could be out of bounds
           {
-            if((game_ball.ball_x - 1) == MAX_LEFT_CORD - 1)
+            if((game_ball.ball_x - 1) < MAX_LEFT_CORD )
             {
               //Reflect as out of bounds
-              game_ball.direction[1] = BALL_MOVE_RIGHT;
+              //game_ball.direction[1] = BALL_MOVE_RIGHT;
+              direction = BALL_MOVE_RIGHT;
+              found = true;
+
             }
           }
           //if next light is +1 on middle three x
         }
         else if(game_ball.direction[1] == BALL_MOVE_RIGHT)
         {
-          if(((game_ball.ball_y + 1 )== 0) ||((game_ball.ball_y + 1 )== 1) || ((game_ball.ball_y + 1 )== 2) ||
-          ((game_ball.ball_y + 1 )== 3)||((game_ball.ball_y + 1 )== 4)) //Y's which could be out of bounds
+          if(((game_ball.ball_y - 1 )== 0) ||((game_ball.ball_y - 1 )== 1) || ((game_ball.ball_y - 1 )== 2) ||
+          ((game_ball.ball_y - 1 )== 3)||((game_ball.ball_y - 1 )== 4)) //Y's which could be out of bounds
           {
-              if((game_ball.ball_x + 1) == MAX_RIGHT_CORD + 1)
+              if((game_ball.ball_x + 1) > MAX_RIGHT_CORD )
               {
-                game_ball.direction[1] = BALL_MOVE_LEFT;
+
+                //game_ball.direction[1] = BALL_MOVE_LEFT;
+                direction = BALL_MOVE_LEFT;
+                found = true;
               }
 
 
@@ -124,29 +132,32 @@ void detect_wall()
         }
 
       }
-      else
+      else//Going down
       {
         if (game_ball.direction[1] == BALL_MOVE_LEFT)
         {
-          if(((game_ball.ball_y - 1 )== 0) ||((game_ball.ball_y - 1 )== 1) || ((game_ball.ball_y + 1 )== 2) ||
-          ((game_ball.ball_y - 1 )== 3)||((game_ball.ball_y - 1 )== 4)) //Y's which could be out of bounds
+          if(((game_ball.ball_y + 1 )== 0) ||((game_ball.ball_y + 1 )== 1) || ((game_ball.ball_y + 1 )== 2) ||
+          ((game_ball.ball_y + 1 )== 3)||((game_ball.ball_y + 1 )== 4)) //Y's which could be out of bounds
           {
-            if((game_ball.ball_x - 1) == MAX_LEFT_CORD - 1)
+            if((game_ball.ball_x - 1) < MAX_LEFT_CORD )
             {
               //Reflect as out of bounds
-              game_ball.direction[1] = BALL_MOVE_RIGHT;
+              //game_ball.direction[1] = BALL_MOVE_RIGHT;
+              direction = BALL_MOVE_RIGHT;
+              found = true;
             }
           }
           //if next light is +1 on middle three x
         }
         else if(game_ball.direction[1] == BALL_MOVE_RIGHT)
         {
-          if(((game_ball.ball_y - 1 )== 0) ||((game_ball.ball_y - 1 )== 1) || ((game_ball.ball_y + 1 )== 2) ||
-          ((game_ball.ball_y - 1 )== 3)||((game_ball.ball_y - 1 )== 4)) //Y's which could be out of bounds
+          if(((game_ball.ball_y + 1 )== 0) ||((game_ball.ball_y + 1 )== 1) || ((game_ball.ball_y + 1 )== 2) ||
+          ((game_ball.ball_y + 1 )== 3)||((game_ball.ball_y + 1 )== 4)) //Y's which could be out of bounds
           {
-              if((game_ball.ball_x + 1) == MAX_RIGHT_CORD + 1)
+              if((game_ball.ball_x + 1) > MAX_RIGHT_CORD)
               {
-                game_ball.direction[1] = BALL_MOVE_LEFT;
+                direction = BALL_MOVE_LEFT;
+                found = true;
               }
 
 
@@ -155,7 +166,11 @@ void detect_wall()
         }
 
       }
+      if (found)
+      {
+        game_ball.direction[1] = direction;
 
+      }
 
     }
 
@@ -184,6 +199,7 @@ void detect_paddle()
             //Reflect Left
             game_ball.direction[0] = BALL_MOVE_UP;
             game_ball.direction[1] = BALL_MOVE_LEFT;
+
           }
           else if (((game_ball.ball_y + 1) == USER_Y ) &&
               (game_ball.ball_x - 1 ) == player_1.get_paddle_right())
@@ -191,6 +207,7 @@ void detect_paddle()
                 //Reflect right
                 game_ball.direction[0] = BALL_MOVE_UP;
                 game_ball.direction[1] = BALL_MOVE_RIGHT;
+
               }
 
         }
@@ -204,6 +221,7 @@ void detect_paddle()
             //Reflect Left
             game_ball.direction[0] = BALL_MOVE_UP;
             game_ball.direction[1] = BALL_MOVE_LEFT;
+
           }
           else if (((game_ball.ball_y + 1) == USER_Y ) &&
               (game_ball.ball_x + 1 ) == player_1.get_paddle_right())
@@ -211,6 +229,7 @@ void detect_paddle()
                 //Reflect right
                 game_ball.direction[0] = BALL_MOVE_UP;
                 game_ball.direction[1] = BALL_MOVE_RIGHT;
+
               }
         }
       }
@@ -221,12 +240,14 @@ void detect_paddle()
         {
           game_ball.direction[0] = BALL_MOVE_UP;
           game_ball.direction[1] = BALL_MOVE_LEFT;
+
         }
         else if (((game_ball.ball_y + 1) == USER_Y) && (game_ball.ball_x == player_1.get_paddle_right()))
           //REFLECT RIGHT
           {
           game_ball.direction[0] = BALL_MOVE_UP;
           game_ball.direction[1] = BALL_MOVE_RIGHT;
+
         }
       }
     break;
@@ -243,6 +264,8 @@ void detect_paddle()
             //Reflect Left
             game_ball.direction[0] = BALL_MOVE_DOWN;
             game_ball.direction[1] = BALL_MOVE_LEFT;
+
+
           }
           else if (((game_ball.ball_y - 1) == OPPONENT_Y ) &&
               (game_ball.ball_x - 1 ) == computer_player.get_paddle_right())
@@ -250,6 +273,7 @@ void detect_paddle()
                 //Reflect right
                 game_ball.direction[0] = BALL_MOVE_DOWN;
                 game_ball.direction[1] = BALL_MOVE_RIGHT;
+
               }
 
         }
@@ -263,6 +287,7 @@ void detect_paddle()
             //Reflect Left
             game_ball.direction[0] = BALL_MOVE_DOWN;
             game_ball.direction[1] = BALL_MOVE_LEFT;
+
           }
           else if (((game_ball.ball_y - 1) == OPPONENT_Y ) &&
               (game_ball.ball_x + 1 ) == computer_player.get_paddle_right())
@@ -270,6 +295,7 @@ void detect_paddle()
                 //Reflect right
                 game_ball.direction[0] = BALL_MOVE_DOWN;
                 game_ball.direction[1] = BALL_MOVE_RIGHT;
+                  //THIS ONE
               }
         }
       }
@@ -280,12 +306,14 @@ void detect_paddle()
         {
           game_ball.direction[0] = BALL_MOVE_DOWN;
           game_ball.direction[1] = BALL_MOVE_LEFT;
+
         }
         else if (((game_ball.ball_y - 1) == OPPONENT_Y) && (game_ball.ball_x == computer_player.get_paddle_right()))
           //REFLECT RIGHT
           {
           game_ball.direction[0] = BALL_MOVE_DOWN;
           game_ball.direction[1] = BALL_MOVE_RIGHT;
+
         }
       }
     break;
@@ -394,7 +422,9 @@ void draw_ball()
     {
       new_round = false;
       detect_wall();
+
       detect_paddle();
+
       update_ball(); //Move the ball
 
     }
@@ -523,14 +553,14 @@ void pong()
 {
   //Create individual fibers to handle actor movement
   create_fiber(draw_user_paddle);
-  create_fiber(draw_opponent_paddle);
+  //create_fiber(draw_opponent_paddle);
   create_fiber(draw_ball);
 
 
 
   while(player_1.get_score() != 3) //Quit Condition
   {
-    uBit.sleep(20);//Yield main fiber (let the user play the game and )
+    uBit.sleep(100);//Yield main fiber (let the user play the game and )
     uBit.display.image.paste(screen); //refresh the screen
   }
 }

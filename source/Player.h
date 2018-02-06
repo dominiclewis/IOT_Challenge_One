@@ -86,7 +86,7 @@ class Player
   private: //Private variables
     int player_score = 0;
     bool player_is_user;
-    int paddle_left = 0; //Co-Ord
-    int paddle_right = 1; //Co-Ord
+    int paddle_left; //Co-Ord
+    int paddle_right; //Co-Ord
 
 };
