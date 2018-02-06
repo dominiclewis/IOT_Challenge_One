@@ -39,7 +39,6 @@ MicroBitImage screen(5,5); //Create an instance of 5x5 Led Matrix
 Player player_1(true); //instantiate player
 Player computer_player(false);//Instantiate computer program
 bool new_round = true;
-
 struct movement //Stores related user movement data
 {
 bool trying_to_move; //Is the user trying to move
@@ -94,7 +93,7 @@ void detect_wall()
 {
   //Check for left wall
   int direction = -9;
-  bool found = false;
+ bool found = false;
     if (game_ball.direction[0] == BALL_MOVE_UP)
       {
         if (game_ball.direction[1] == BALL_MOVE_LEFT)
@@ -158,6 +157,7 @@ void detect_wall()
               {
                 direction = BALL_MOVE_LEFT;
                 found = true;
+
               }
 
 
@@ -422,8 +422,7 @@ void draw_ball()
     {
       new_round = false;
       detect_wall();
-
-      detect_paddle();
+    detect_paddle();
 
       update_ball(); //Move the ball
 
@@ -553,7 +552,7 @@ void pong()
 {
   //Create individual fibers to handle actor movement
   create_fiber(draw_user_paddle);
-  //create_fiber(draw_opponent_paddle);
+  create_fiber(draw_opponent_paddle);
   create_fiber(draw_ball);
 
 
