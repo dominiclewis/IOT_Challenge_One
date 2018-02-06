@@ -39,6 +39,7 @@ MicroBitImage screen(5,5); //Create an instance of 5x5 Led Matrix
 Player player_1(true); //instantiate player
 Player computer_player(false);//Instantiate computer program
 bool new_round = true;
+bool restart = false;
 struct movement //Stores related user movement data
 {
 bool trying_to_move; //Is the user trying to move
@@ -89,11 +90,12 @@ void on_button_b(MicroBitEvent e)
 *Returns: Void
 *Accepts: N/A
 */
-void detect_wall()
+void detect_border()
 {
   //Check for left wall
   int direction = -9;
  bool found = false;
+
     if (game_ball.direction[0] == BALL_MOVE_UP)
       {
         if (game_ball.direction[1] == BALL_MOVE_LEFT)
@@ -157,6 +159,25 @@ void detect_wall()
       {
         game_ball.direction[1] = direction;
 
+      } else
+      {
+        //Check for score
+        if (game_ball.direction[0] == BALL_MOVE_UP)
+        {
+          if ((game_ball.ball_y) == OPPONENT_Y + 1)
+          {
+            //player scored
+            player_1.adjust_score(1);
+            restart = true;
+          }
+
+        }
+        else if (game_ball.direction[0] == BALL_MOVE_DOWN)
+        {
+          //CPU Scored
+           player_1.adjust_score(-1);
+           restart = true;
+        }
       }
 
     }
@@ -409,7 +430,7 @@ void draw_ball()
     else
     {
       new_round = false;
-      detect_wall();
+      detect_border();
      detect_paddle();
 
       update_ball(); //Move the ball
@@ -548,13 +569,14 @@ void draw_user_paddle()
 void pong()
 {
   //Create individual fibers to handle actor movement
+
   create_fiber(draw_user_paddle);
   create_fiber(draw_opponent_paddle);
   create_fiber(draw_ball);
 
 
 
-  while(player_1.get_score() != 3) //Quit Condition
+  while(restart == false) //Quit Condition
   {
     uBit.sleep(100);//Yield main fiber (let the user play the game and )
     uBit.display.image.paste(screen); //refresh the screen
