@@ -25,7 +25,7 @@
 #define BALL_MOVE_UP 20
 #define BALL_MOVE_DOWN 21
 #define PADDLE_SPEED 80 //This is how long to sleep
-#define OPPONENT_PADDLE_SPEED 1100
+#define OPPONENT_PADDLE_SPEED 600
 #define BALL_FALL_SPEED 1200
 
 
@@ -583,8 +583,7 @@ void reset()
       }
     }
     */
-
-    uBit.display.clear();
+    screen.clear();
     user_movement.trying_to_move = false;
     computer_movement.trying_to_move = false;
     new_round = true;
@@ -615,7 +614,9 @@ void pong()
 
   while(1) //Quit Condition
   {
-      uBit.sleep(100);//Yield main fiber (let the user play the game and )
+
+    uBit.sleep(100);//Yield main fiber (let the user play the game and )
+
     uBit.display.image.paste(screen); //refresh the screen
     if (restart)
     {
