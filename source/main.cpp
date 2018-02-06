@@ -42,6 +42,7 @@ Player computer_player(false);//Instantiate computer program
 bool new_round = true;
 bool restart = false;
 int scorer;
+bool finish = false;
 struct movement //Stores related user movement data
 {
 bool trying_to_move; //Is the user trying to move
@@ -342,7 +343,10 @@ void detect_paddle()
 */
 void draw_opponent_paddle()
 {
-
+  if (finish)
+  {
+    release_fiber();
+  }
   while(1)
   {
     if(new_round)
@@ -419,6 +423,10 @@ void draw_opponent_paddle()
 */
 void draw_ball()
 {
+  if (finish)
+  {
+    release_fiber();
+  }
   bool skip = false;
   while(1)
   {
@@ -518,6 +526,10 @@ void update_ball()
 */
 void draw_user_paddle()
 {
+  if (finish)
+  {
+    release_fiber();
+  }
   uBit.sleep(PADDLE_SPEED);
   if (new_round)
   {
@@ -649,6 +661,13 @@ void pong()
       update_score();
       uBit.display.scroll("Score");
       uBit.display.print(player_1.get_score());
+      if (player_1.get_score() == 3)
+      {
+        uBit.display.scroll("Winner!!!");
+        finish = true;
+        release_fiber();
+
+      }
         reset();
 
     }
