@@ -25,7 +25,7 @@
 #define BALL_MOVE_UP 20
 #define BALL_MOVE_DOWN 21
 #define PADDLE_SPEED 80 //This is how long to sleep
-#define OPPONENT_PADDLE_SPEED 900
+#define OPPONENT_PADDLE_SPEED 1100
 #define BALL_FALL_SPEED 1200
 
 
@@ -351,6 +351,10 @@ void draw_opponent_paddle()
       //Update the class co-ordinates
       computer_player.set_paddle_left(OPPONENT_START_X);
       computer_player.set_paddle_right(OPPONENT_START_X + 1);
+      if ((new_round) && (restart))
+      {
+        return;
+      }
 
     }
     else if (new_round == false)
@@ -416,7 +420,6 @@ void draw_ball()
   bool skip = false;
   while(1)
   {
-
     if((new_round) && (skip == false))
     {
       //Draw the ball in the middle of the screen
@@ -427,19 +430,19 @@ void draw_ball()
       game_ball.direction[0] = BALL_MOVE_DOWN;
       game_ball.direction[1] = BALL_MOVE_STRAIGHT;
       skip = true;//Do not re-initiliase the ball
-
+      if ((new_round) && (restart))
+      {
+        return;
+      }
 
     }
     else
     {
-      new_round = false;
-      detect_border();
+     new_round = false;
+     detect_border();
      detect_paddle();
-
-      update_ball(); //Move the ball
-
+     update_ball(); //Move the ball
     }
-
       uBit.sleep(BALL_FALL_SPEED ); //Can't sleep at the start as new_round flag wont work
     }
 }
@@ -523,6 +526,7 @@ void draw_user_paddle()
     player_1.set_paddle_left(USER_START_X);
     player_1.set_paddle_right(USER_START_X + 1);
     //new_round = false; //
+
   }
   //The user has moved
   else if ( (new_round == false) && (user_movement.trying_to_move == true))
@@ -565,6 +569,36 @@ void draw_user_paddle()
 
 }
 /*
+*Purpose: Resets the game state
+*Returns: Void
+*Accepts: N/A
+*/
+void reset()
+{   //Clear all the pixel
+    /*for (int y = 0; y < 4; y++)
+    {
+      for (int x =0; x < 4; x++)
+      {
+        screen.setPixelValue(x,y,0);
+      }
+    }
+    */
+
+    uBit.display.clear();
+    user_movement.trying_to_move = false;
+    computer_movement.trying_to_move = false;
+    new_round = true;
+    draw_user_paddle();
+    draw_opponent_paddle();
+    draw_ball();
+    restart = false;
+    new_round = false;
+
+
+
+
+}
+/*
 *Purpose: Controls the flow of the game
 *Returns: Void
 *Accepts: N/A
@@ -581,13 +615,14 @@ void pong()
 
   while(1) //Quit Condition
   {
-    uBit.sleep(100);//Yield main fiber (let the user play the game and )
+      uBit.sleep(100);//Yield main fiber (let the user play the game and )
     uBit.display.image.paste(screen); //refresh the screen
-    if (player_1.get_score() == 1)
+    if (restart)
     {
-      screen.setPixelValue(2,2,1);
+        reset();
 
     }
+
   }
 
 
