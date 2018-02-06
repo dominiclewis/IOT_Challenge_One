@@ -164,7 +164,7 @@ void detect_border()
         //Check for score
         if (game_ball.direction[0] == BALL_MOVE_UP)
         {
-          if ((game_ball.ball_y) == OPPONENT_Y + 1)
+          if ((game_ball.ball_y) < OPPONENT_Y )
           {
             //player scored
             player_1.adjust_score(1);
@@ -175,8 +175,11 @@ void detect_border()
         else if (game_ball.direction[0] == BALL_MOVE_DOWN)
         {
           //CPU Scored
+          if((game_ball.ball_y) > USER_Y)
+          {
            player_1.adjust_score(-1);
            restart = true;
+           }
         }
       }
 
@@ -576,11 +579,18 @@ void pong()
 
 
 
-  while(restart == false) //Quit Condition
+  while(1) //Quit Condition
   {
     uBit.sleep(100);//Yield main fiber (let the user play the game and )
     uBit.display.image.paste(screen); //refresh the screen
+    if (player_1.get_score() == 1)
+    {
+      screen.setPixelValue(2,2,1);
+
+    }
   }
+
+
 }
 int main()
 {
@@ -591,6 +601,7 @@ int main()
   while(1){
     //uBit.display.scroll("Pong!!!");
     pong();
+
 }
   release_fiber();//Release the main fiber
 }
