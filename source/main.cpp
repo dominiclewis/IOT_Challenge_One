@@ -27,7 +27,8 @@
 #define PADDLE_SPEED 80 //This is how long to sleep
 #define OPPONENT_PADDLE_SPEED 600
 #define BALL_FALL_SPEED 1200
-
+#define USER 0
+#define CPU 1
 
 
 //Prototypes
@@ -40,6 +41,7 @@ Player player_1(true); //instantiate player
 Player computer_player(false);//Instantiate computer program
 bool new_round = true;
 bool restart = false;
+int scorer;
 struct movement //Stores related user movement data
 {
 bool trying_to_move; //Is the user trying to move
@@ -167,7 +169,7 @@ void detect_border()
           if ((game_ball.ball_y) < OPPONENT_Y )
           {
             //player scored
-            player_1.adjust_score(1);
+            scorer = USER;
             restart = true;
           }
 
@@ -177,7 +179,7 @@ void detect_border()
           //CPU Scored
           if((game_ball.ball_y) > USER_Y)
           {
-           player_1.adjust_score(-1);
+           scorer = CPU;
            restart = true;
            }
         }
@@ -592,8 +594,30 @@ void reset()
     draw_ball();
     restart = false;
     new_round = false;
+}
+/*
+*Purpose: Handles the score of the game
+*Returns: Void
+*Accepts: N/A
+*/
 
+void update_score()
+{
+  switch(scorer)
+  {
+    case (USER):
+    player_1.adjust_score(1);
+    scorer = 99;
+      break;
+    case (CPU):
+    if (player_1.get_score() > 0)
+    {
+    player_1.adjust_score(-1);
+    }
+    scorer = 99;
+      break;
 
+  }
 
 
 }
@@ -620,6 +644,11 @@ void pong()
     uBit.display.image.paste(screen); //refresh the screen
     if (restart)
     {
+      screen.clear();
+      uBit.display.image.paste(screen);
+      update_score();
+      uBit.display.scroll("Score");
+      uBit.display.print(player_1.get_score());
         reset();
 
     }
