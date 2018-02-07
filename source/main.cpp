@@ -19,13 +19,13 @@
 #define MAX_RIGHT_CORD 4
 #define LEFT_DIR 0x01
 #define RIGHT_DIR 0x02
-#define BALL_MOVE_LEFT 22
-#define BALL_MOVE_RIGHT 23
-#define BALL_MOVE_STRAIGHT 24
-#define BALL_MOVE_UP 20
-#define BALL_MOVE_DOWN 21
+#define BALL_MOVE_LEFT 1
+#define BALL_MOVE_RIGHT 2
+#define BALL_MOVE_STRAIGHT 3
+#define BALL_MOVE_UP 4
+#define BALL_MOVE_DOWN 5
 #define PADDLE_SPEED 80 //This is how long to sleep
-#define OPPONENT_PADDLE_SPEED 600
+#define OPPONENT_PADDLE_SPEED 900
 #define BALL_FALL_SPEED 1200
 #define USER 0
 #define CPU 1
@@ -57,12 +57,7 @@ struct ball //Stores information regarding the ball
   int ball_x;
   int ball_y;
   int direction[2]; // 0 = Up/Down, 1 = Right/Left/Straight
-  /*
-  #define BALL_MOVE_LEFT 22
-  #define BALL_MOVE_RIGHT 23
-  #define BALL_MOVE_UP 20
-  #define BALL_MOVE_DOWN 21
-  */
+
 };
 
 ball game_ball;
@@ -102,11 +97,12 @@ void detect_border()
   int direction = -9;
  bool found = false;
 
+
     if (game_ball.direction[0] == BALL_MOVE_UP)
       {
         if (game_ball.direction[1] == BALL_MOVE_LEFT)
         {
-          if(((game_ball.ball_y - 1 ) >= 0) && ((game_ball.ball_y - 1)<= 4)) //Y's which could be out of bounds
+          if(((game_ball.ball_y - 1 ) >= -1) && ((game_ball.ball_y - 1)<= 4)) //Y's which could be out of bounds
           {
             if((game_ball.ball_x - 1) < MAX_LEFT_CORD )
             {
@@ -121,7 +117,7 @@ void detect_border()
         }
         else if(game_ball.direction[1] == BALL_MOVE_RIGHT)
         {
-          if(((game_ball.ball_y - 1 ) >= 0) && ((game_ball.ball_y - 1)<= 4)) //Y's which could be out of bounds
+          if(((game_ball.ball_y - 1 ) >= -1) && ((game_ball.ball_y - 1)<= 4)) //Y's which could be out of bounds
           {
               if((game_ball.ball_x + 1) > MAX_RIGHT_CORD )
               {
@@ -133,17 +129,19 @@ void detect_border()
           }
         }
       }
-      else if (game_ball.direction[1] == BALL_MOVE_DOWN)//Going down
+      else if (game_ball.direction[0] == BALL_MOVE_DOWN)//Going down
       {
+
         if (game_ball.direction[1] == BALL_MOVE_LEFT)
         {
-            if(((game_ball.ball_y + 1 ) >= 0) && ((game_ball.ball_y + 1)<= 4)) //Y's which could be out of bounds
+            if(((game_ball.ball_y + 1 ) >= 0) && ((game_ball.ball_y + 1)<= 5)) //Y's which could be out of bounds
           {
             if((game_ball.ball_x - 1) < MAX_LEFT_CORD )
             {
               //Reflect as out of bounds
               //game_ball.direction[1] = BALL_MOVE_RIGHT;
               direction = BALL_MOVE_RIGHT;
+
               found = true;
             }
           }
@@ -151,12 +149,16 @@ void detect_border()
         }
         else if(game_ball.direction[1] == BALL_MOVE_RIGHT)
         {
-              if(((game_ball.ball_y + 1 ) >= 0) && ((game_ball.ball_y + 1)<= 4)) //Y's which could be out of bounds
+              if(((game_ball.ball_y + 1 ) >= 0) && ((game_ball.ball_y + 1)<= 5)) //Y's which could be out of bounds
           {
               if((game_ball.ball_x + 1) > MAX_RIGHT_CORD)
               {
                 direction = BALL_MOVE_LEFT;
                 found = true;
+              /*  for (int i = 0; i <= 10000; i++)
+                {
+                uBit.display.print("H");
+              }*/
               }
           }
         }
@@ -164,8 +166,8 @@ void detect_border()
       if (found)
       {
         game_ball.direction[1] = direction;
-
-      } else
+      }
+      else
       {
         //Check for score
         if (game_ball.direction[0] == BALL_MOVE_UP)
@@ -336,7 +338,16 @@ void detect_paddle()
     break;
 
   }
+  /*for (int i = 0; i <= 10000; i++)
+  {
+  uBit.display.print("p");
+  }
 
+  for (int i = 0; i <= 10000; i++)
+  {
+  uBit.display.print(game_ball.direction[1]);
+  }
+  */
 }
 
 /*
@@ -440,6 +451,7 @@ void draw_ball()
       //Draw the ball in the middle of the screen
       screen.setPixelValue(BALL_START_X,BALL_START_Y,1);
       //Update the game ball
+      speed_increase = 0;
       game_ball.ball_x = BALL_START_X;
       game_ball.ball_y = BALL_START_Y;
       game_ball.direction[0] = BALL_MOVE_DOWN;
@@ -468,9 +480,112 @@ void draw_ball()
         speed_increase = 0;
       }
      new_round = false;
+  /*   if(game_ball.ball_x >= MAX_RIGHT_CORD)
+     {
+      for (int i = 0; i <= 10000; i++)
+      {
+      uBit.display.print("A");
+      }
+      for (int i = 0; i <= 10000; i++)
+      {
+      uBit.display.print(game_ball.direction[0]);
+      }
+      for (int i = 0; i <= 10000; i++)
+      {
+      uBit.display.print(game_ball.direction[1]);
+      }
+      for (int i = 0; i <= 10000; i++)
+      {
+      uBit.display.print(game_ball.ball_x);
+      }
+      for (int i = 0; i <= 10000; i++)
+      {
+      uBit.display.print(game_ball.ball_y);
+      }
+    }*/
      detect_border();
+    /* if(game_ball.ball_x >= MAX_RIGHT_CORD)
+     {
+      for (int i = 0; i <= 10000; i++)
+      {
+      uBit.display.print("B");
+      }
+      for (int i = 0; i <= 10000; i++)
+      {
+      uBit.display.print(game_ball.direction[0]);
+      }
+      for (int i = 0; i <= 10000; i++)
+      {
+      uBit.display.print(game_ball.direction[1]);
+      }
+      for (int i = 0; i <= 10000; i++)
+      {
+      uBit.display.print(game_ball.ball_x);
+      }
+      for (int i = 0; i <= 10000; i++)
+      {
+      uBit.display.print(game_ball.ball_y);
+      }
+    }*/
      detect_paddle();
+     /*if(game_ball.ball_x >= MAX_RIGHT_CORD)
+{
+      for (int i = 0; i <= 10000; i++)
+      {
+      uBit.display.print("C");
+      }
+      for (int i = 0; i <= 10000; i++)
+      {
+      uBit.display.print(game_ball.direction[0]);
+      }
+      for (int i = 0; i <= 10000; i++)
+      {
+      uBit.display.print(game_ball.direction[1]);
+      }
+      for (int i = 0; i <= 10000; i++)
+      {
+      uBit.display.print(game_ball.ball_x);
+      }
+      for (int i = 0; i <= 10000; i++)
+      {
+      uBit.display.print(game_ball.ball_y);
+      }
+    }*/
+     detect_border();
+     /*if(game_ball.ball_x >= MAX_RIGHT_CORD)
+{
+      for (int i = 0; i <= 10000; i++)
+      {
+      uBit.display.print("D");
+      }
+      for (int i = 0; i <= 10000; i++)
+      {
+      uBit.display.print(game_ball.direction[0]);
+      }
+      for (int i = 0; i <= 10000; i++)
+      {
+      uBit.display.print(game_ball.direction[1]);
+      }
+      for (int i = 0; i <= 10000; i++)
+      {
+      uBit.display.print(game_ball.ball_x);
+      }
+      for (int i = 0; i <= 10000; i++)
+      {
+      uBit.display.print(game_ball.ball_y);
+      }
+
+      }
+*/
      update_ball(); //Move the ball
+  /*   if(game_ball.ball_x < MAX_LEFT_CORD)
+     {
+       screen.setPixelValue(2,2,1);
+     }
+     if(game_ball.ball_x  > MAX_RIGHT_CORD)
+     {
+       screen.setPixelValue(2,3,1)
+     }*/
     }
       uBit.sleep(BALL_FALL_SPEED - speed_increase ); //Can't sleep at the start as new_round flag wont work
     }
