@@ -44,6 +44,7 @@ bool new_round = true;
 bool restart = false;
 bool finish = false;
 int rally = 0;
+//int speed_increase = 0;
 int scorer;
 
 struct movement //Stores related user movement data
@@ -436,6 +437,7 @@ void draw_ball()
   {
     if((new_round) && (skip == false))
     {
+      rally = 0;
       //Draw the ball in the middle of the screen
       screen.setPixelValue(BALL_START_X,BALL_START_Y,1);
       //Update the game ball
@@ -621,11 +623,16 @@ void reset()
     computer_movement.trying_to_move = false;
     new_round = true;
     draw_user_paddle();
+    for (int i =0; i < 1000; i++ )
+    {
+      uBit.display.print("A");
+    }
     draw_opponent_paddle();
     draw_ball();
+    game_ball.ball_y = game_ball.ball_y - 1;
     restart = false;
     new_round = false;
-    rally = 0;
+
 }
 /*
 *Purpose: Handles the score of the game
@@ -680,7 +687,7 @@ void pong()
       uBit.display.image.paste(screen);
       update_score();
       uBit.display.scroll("Score");
-      uBit.display.print(player_1.get_score());
+      uBit.display.scroll(player_1.get_score());
       if (player_1.get_score() == 3)
       {
         uBit.display.scroll("Winner!!!");
