@@ -819,7 +819,7 @@ int main()
   uBit.messageBus.listen(MICROBIT_ID_BUTTON_A, MICROBIT_BUTTON_EVT_CLICK, on_button_a);
   uBit.messageBus.listen(MICROBIT_ID_BUTTON_B, MICROBIT_BUTTON_EVT_CLICK, on_button_b);
   while(1){
-    //uBit.display.scroll("Pong!!!");
+    uBit.display.scroll("Pong!!!");
     pong();
 
 }
