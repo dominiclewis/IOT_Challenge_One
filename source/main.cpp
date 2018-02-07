@@ -31,6 +31,7 @@
 #define CPU 1
 
 
+
 //Prototypes
 void detect_paddle();
 void draw_user_paddle();
@@ -44,6 +45,7 @@ bool new_round = true;
 bool restart = false;
 bool finish = false;
 int rally = 0;
+int speed_increase = 0;
 //int speed_increase = 0;
 int scorer;
 
@@ -346,12 +348,16 @@ void detect_paddle()
 */
 void draw_opponent_paddle()
 {
+
+
   if (finish)
   {
+
     release_fiber();
   }
   while(1)
   {
+
     if(new_round)
     {
       //draw the paddle for the computer in the top right
@@ -360,11 +366,12 @@ void draw_opponent_paddle()
       //Update the class co-ordinates
       computer_player.set_paddle_left(OPPONENT_START_X);
       computer_player.set_paddle_right(OPPONENT_START_X + 1);
-      if ((new_round) && (restart))
+
+    /*  if ((new_round) && (restart))
       {
         return;
       }
-
+*/
     }
     else if (new_round == false)
     {
@@ -426,7 +433,7 @@ void draw_opponent_paddle()
 */
 void draw_ball()
 {
-  int speed_increase = 0;
+   speed_increase = 0;
 
   if (finish)
   {
@@ -462,7 +469,7 @@ void draw_ball()
           //every 2
           if(rally * 20 < (BALL_FALL_SPEED - 100) )//Don't fall too fast
           {
-          speed_increase = rally * 20;
+          speed_increase = rally * 50;
           }
         }
       }
@@ -554,6 +561,7 @@ void update_ball()
 */
 void draw_user_paddle()
 {
+
   if (finish)
   {
     release_fiber();
@@ -617,21 +625,51 @@ void draw_user_paddle()
 */
 void reset()
 {   //Clear all the pixel
-
+    //thread = thread +1;
     screen.clear();
     user_movement.trying_to_move = false;
     computer_movement.trying_to_move = false;
-    new_round = true;
+    /*new_round = true;
     draw_user_paddle();
     for (int i =0; i < 1000; i++ )
     {
-      uBit.display.print("A");
+      uBit.display.print("Z");
     }
-    draw_opponent_paddle();
-    draw_ball();
+    //This one
+  //  draw_opponent_paddle();
+
+    //draw_ball();
+
     game_ball.ball_y = game_ball.ball_y - 1;
     restart = false;
     new_round = false;
+    */
+    //Draw the paddle in the bottom left
+    screen.setPixelValue(USER_START_X,USER_Y,1);
+    screen.setPixelValue(1,USER_Y,1);
+    //Update the player calss with the co-ordinates
+    player_1.set_paddle_left(USER_START_X);
+    player_1.set_paddle_right(USER_START_X + 1);
+
+    //opponent      //draw the paddle for the computer in the top right
+          screen.setPixelValue(OPPONENT_START_X,OPPONENT_Y,1);
+          screen.setPixelValue(OPPONENT_START_X + 1 ,OPPONENT_Y,1);
+          //Update the class co-ordinates
+          computer_player.set_paddle_left(OPPONENT_START_X);
+          computer_player.set_paddle_right(OPPONENT_START_X + 1);
+          //Ball
+          rally = 0;
+          //Draw the ball in the middle of the screen
+          screen.setPixelValue(BALL_START_X,BALL_START_Y,1);
+          //Update the game ball
+          speed_increase = 0;
+          game_ball.ball_x = BALL_START_X;
+          game_ball.ball_y = BALL_START_Y;
+          game_ball.direction[0] = BALL_MOVE_DOWN;
+          game_ball.direction[1] = BALL_MOVE_STRAIGHT;
+    restart = false;
+    new_round = false;
+
 
 }
 /*
