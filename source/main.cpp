@@ -35,14 +35,17 @@
 void detect_paddle();
 void draw_user_paddle();
 void update_ball();
+
 MicroBit uBit;//Instance of the MicroBit class
 MicroBitImage screen(5,5); //Create an instance of 5x5 Led Matrix
 Player player_1(true); //instantiate player
 Player computer_player(false);//Instantiate computer program
 bool new_round = true;
 bool restart = false;
-int scorer;
 bool finish = false;
+int rally = 0;
+int scorer;
+
 struct movement //Stores related user movement data
 {
 bool trying_to_move; //Is the user trying to move
@@ -423,6 +426,8 @@ void draw_opponent_paddle()
 */
 void draw_ball()
 {
+  int speed_increase = 0;
+
   if (finish)
   {
     release_fiber();
@@ -448,12 +453,26 @@ void draw_ball()
     }
     else
     {
+      if (rally!= 0) //don't divide by 0 (This increases the ball speed over time)
+      {
+        if (rally % 2 == 0)
+        {
+          //every 2
+          if(rally * 20 < (BALL_FALL_SPEED - 100) )//Don't fall too fast
+          {
+          speed_increase = rally * 20;
+          }
+        }
+      }
+      else{
+        speed_increase = 0;
+      }
      new_round = false;
      detect_border();
      detect_paddle();
      update_ball(); //Move the ball
     }
-      uBit.sleep(BALL_FALL_SPEED ); //Can't sleep at the start as new_round flag wont work
+      uBit.sleep(BALL_FALL_SPEED - speed_increase ); //Can't sleep at the start as new_round flag wont work
     }
 }
 /*
@@ -477,6 +496,7 @@ void update_ball()
             screen.setPixelValue(game_ball.ball_x,game_ball.ball_y,0);
             //turn on the below pixel
             game_ball.ball_y = game_ball.ball_y + 1;
+            rally = rally + 1; //game has either started or has been returned
     break;
 }
 //Left/Right
@@ -606,6 +626,7 @@ void reset()
     draw_ball();
     restart = false;
     new_round = false;
+    rally = 0;
 }
 /*
 *Purpose: Handles the score of the game
