@@ -45,6 +45,7 @@ bool new_round = true;
 bool restart = false;
 bool finish = false;
 int rally = 0;
+bool reset_y = false;
 int speed_increase = 0;
 //int speed_increase = 0;
 int scorer;
@@ -348,8 +349,6 @@ void detect_paddle()
 */
 void draw_opponent_paddle()
 {
-
-
   if (finish)
   {
 
@@ -367,11 +366,7 @@ void draw_opponent_paddle()
       computer_player.set_paddle_left(OPPONENT_START_X);
       computer_player.set_paddle_right(OPPONENT_START_X + 1);
 
-    /*  if ((new_round) && (restart))
-      {
-        return;
-      }
-*/
+
     }
     else if (new_round == false)
     {
@@ -487,6 +482,7 @@ void draw_ball()
      update_ball(); //Move the ball
 
     }
+
       uBit.sleep(BALL_FALL_SPEED - speed_increase ); //Can't sleep at the start as new_round flag wont work
     }
 }
@@ -625,25 +621,11 @@ void draw_user_paddle()
 */
 void reset()
 {   //Clear all the pixel
-    //thread = thread +1;
+
     screen.clear();
     user_movement.trying_to_move = false;
     computer_movement.trying_to_move = false;
-    /*new_round = true;
-    draw_user_paddle();
-    for (int i =0; i < 1000; i++ )
-    {
-      uBit.display.print("Z");
-    }
-    //This one
-  //  draw_opponent_paddle();
 
-    //draw_ball();
-
-    game_ball.ball_y = game_ball.ball_y - 1;
-    restart = false;
-    new_round = false;
-    */
     //Draw the paddle in the bottom left
     screen.setPixelValue(USER_START_X,USER_Y,1);
     screen.setPixelValue(1,USER_Y,1);
@@ -669,7 +651,6 @@ void reset()
           game_ball.direction[1] = BALL_MOVE_STRAIGHT;
     restart = false;
     new_round = false;
-
 
 }
 /*
@@ -715,10 +696,14 @@ void pong()
 
   while(1) //Quit Condition
   {
-
+    if (reset_y)
+    {
+      reset_y = false;
+      game_ball.ball_y = BALL_START_Y - 1;
+    }
+    uBit.display.image.paste(screen); //refresh the screen
     uBit.sleep(100);//Yield main fiber (let the user play the game and )
 
-    uBit.display.image.paste(screen); //refresh the screen
     if (restart)
     {
       screen.clear();
@@ -734,7 +719,7 @@ void pong()
 
       }
         reset();
-
+        reset_y = true;
     }
 
   }
