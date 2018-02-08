@@ -1,20 +1,20 @@
 # Building Instructions
-### Files to download -
-/source/ (Directory - Contains two files)
-main.cpp - Main application code
-player.h - Header fill containing my player class definition 
-module.json (Contains instructions for yota on how to build)
-*Optional*  .yotta.json
+### Files to Download
+1. /source/ (Directory - Contains two files)
+* main.cpp - Main application code
+* player.h - Header fill containing my player class definition
+2. module.json (Contains instructions for yota on how to build)
+3. *Optional*  .yotta.json
 
 ### Commands Required Initially
-*Note* Only do step 1. if .yotta.json is not downloaded.
+*Note* - Only do step 1 if '.yotta.json' is not downloaded.
 1. yt target bbc-microbit-classic-gcc
 2. yt build
 
 # Running Instructions
 The executable can be found inside _/build/bbc-microbit-classic-gcc/source_
 with the executable being named **project_name-combined.hex**
-Copy (cp) this file to _/media/student/MICROBIT_ .It should run then
+Copy (cp) this file to _/media/student/MICROBIT_
 
 # Game Instructions
 ## Pong
