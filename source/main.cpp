@@ -709,11 +709,11 @@ void pong()
       screen.clear();
       uBit.display.image.paste(screen);
       update_score();
-      uBit.display.scroll("Score");
+      uBit.display.scroll("SCORE");
       uBit.display.scroll(player_1.get_score());
       if (player_1.get_score() == 3)
       {
-        uBit.display.scroll("Winner!!!");
+        uBit.display.scroll("WINNER!!!");
         finish = true;
         release_fiber();
 
@@ -733,7 +733,7 @@ int main()
   uBit.messageBus.listen(MICROBIT_ID_BUTTON_A, MICROBIT_BUTTON_EVT_CLICK, on_button_a);
   uBit.messageBus.listen(MICROBIT_ID_BUTTON_B, MICROBIT_BUTTON_EVT_CLICK, on_button_b);
   while(1){
-    uBit.display.scroll("Pong!!!");
+    uBit.display.scroll("PONG!!!");
     pong();
 
 }
