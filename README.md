@@ -1,18 +1,27 @@
-# Building instructions
-### Files required -
+# Building Instructions
+### Files to download -
+/source/ (Directory - Contains two files)
+main.cpp - Main application code
+player.h - Header fill containing my player class definition 
 module.json (Contains instructions for yota on how to build)
-Create a directory inside repository called "Source" where the source code will
-live inside
+*Optional*  .yotta.json
 
 ### Commands Required Initially
-yt target bbc-microbit-classic-gcc
+*Note* Only do step 1. if .yotta.json is not downloaded.
+1. yt target bbc-microbit-classic-gcc
+2. yt build
 
-### Required after
-yt build
-
-
-# Running instructions
+# Running Instructions
 The executable can be found inside _/build/bbc-microbit-classic-gcc/source_
 with the executable being named **project_name-combined.hex**
-Copy (cp) this file to _/media/student/MICROBIT_
-It should then run.
+Copy (cp) this file to _/media/student/MICROBIT_ .It should run then
+
+# Game Instructions
+## Pong
+The user's Paddle is at the bottom of the LED Matrix. The opponent is opposite.
+A ball will spawn in the middle of the game. The objective of the game is to get the ball past the opponent.
+The opponent will try to prevent you from scoring.
+### Scoring
+3 Point game. If the ball goes past the opponent's paddle then the user gets 1 point.
+If the user loses a round by the opponent hitting the ball past them then the player loses 1 point if the user's score is > 0
+After 3 points the game will output a message stating that the user has one and all of the Fibers in use will be released entering BBC Microbit into the low power sleep
