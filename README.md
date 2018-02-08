@@ -12,8 +12,10 @@
 2. yt build
 
 # Running Instructions
-The executable can be found inside _/build/bbc-microbit-classic-gcc/source_.\n
+The executable can be found inside _/build/bbc-microbit-classic-gcc/source_.
+
 with the executable being named _project_name-combined.hex_.
+
 Copy this file to _/media/student/MICROBIT_.
 
 # Game Instructions
