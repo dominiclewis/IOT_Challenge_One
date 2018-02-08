@@ -464,7 +464,7 @@ void draw_ball()
           //every 2
           if(rally * 20 < (BALL_FALL_SPEED - 100) )//Don't fall too fast
           {
-          speed_increase = rally * 50;
+          speed_increase = rally * 37;
           }
         }
       }
