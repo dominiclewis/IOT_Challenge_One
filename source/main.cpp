@@ -25,7 +25,7 @@
 #define BALL_MOVE_UP 4
 #define BALL_MOVE_DOWN 5
 #define PADDLE_SPEED 80 //This is how long to sleep
-#define OPPONENT_PADDLE_SPEED 900
+#define OPPONENT_PADDLE_SPEED 700
 #define BALL_FALL_SPEED 1200
 #define USER 0
 #define CPU 1
@@ -430,9 +430,9 @@ void draw_ball()
         if (rally % 2 == 0)
         {
           //every 2
-          if(rally * 20 < (BALL_FALL_SPEED - 100) )//Don't fall too fast
+          if(rally * 30 < (BALL_FALL_SPEED - 100) )//Don't fall too fast
           {
-          speed_increase = rally * 37; //arbitary number
+          speed_increase = rally * 30; //arbitary number
           }
         }
       }
