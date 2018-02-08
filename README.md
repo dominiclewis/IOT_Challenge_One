@@ -1,8 +1,8 @@
 # Building Instructions
 ### Files to Download
 1. /source/ (Directory - Contains two files)
-* main.cpp - Main application code
-* player.h - Header fill containing my player class definition
+    1. main.cpp - Main application code
+    1. player.h - Header fill containing my player class definition
 2. module.json (Contains instructions for yota on how to build)
 3. *Optional*  .yotta.json
 
