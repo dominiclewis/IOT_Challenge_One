@@ -3,7 +3,7 @@
  * Author: Dominic Lewis
  * Date: 30-01-2018
  * Desc: IOT Assignment 01
- * Notes: For events to be handled I must yield control to the scheduler
+ * Notes:
  */
 
 #include "MicroBit.h"
@@ -47,7 +47,6 @@ bool finish = false;
 int rally = 0;
 bool reset_y = false;
 int speed_increase = 0;
-//int speed_increase = 0;
 int scorer;
 
 struct movement //Stores related user movement data
@@ -61,7 +60,6 @@ struct ball //Stores information regarding the ball
   int ball_x;
   int ball_y;
   int direction[2]; // 0 = Up/Down, 1 = Right/Left/Straight
-
 };
 
 ball game_ball;
@@ -70,6 +68,7 @@ movement computer_movement;
 
 /*
 *Purpose: Event handler for a button
+*Accepts: Event object
 *Returns: N/A
 */
 void on_button_a(MicroBitEvent e) //Move left
@@ -81,6 +80,7 @@ void on_button_a(MicroBitEvent e) //Move left
 
 /*
 *Purpose: Event handler for b button, moves the player right
+*Accepts: Event object
 *Returns: N/A
 */
 void on_button_b(MicroBitEvent e)
@@ -88,8 +88,8 @@ void on_button_b(MicroBitEvent e)
   user_movement.trying_to_move = true;
   user_movement.direction = RIGHT_DIR;
   draw_user_paddle();
-
 }
+
 /*
 *Purpose: Detects whether the ball is going to colide with a wall
 *Returns: Void
@@ -101,7 +101,6 @@ void detect_border()
   int direction = -9;
  bool found = false;
 
-
     if (game_ball.direction[0] == BALL_MOVE_UP)
       {
         if (game_ball.direction[1] == BALL_MOVE_LEFT)
@@ -111,10 +110,8 @@ void detect_border()
             if((game_ball.ball_x - 1) < MAX_LEFT_CORD )
             {
               //Reflect as out of bounds
-              //game_ball.direction[1] = BALL_MOVE_RIGHT;
               direction = BALL_MOVE_RIGHT;
               found = true;
-
             }
           }
           //if next light is +1 on middle three x
@@ -125,8 +122,6 @@ void detect_border()
           {
               if((game_ball.ball_x + 1) > MAX_RIGHT_CORD )
               {
-
-                //game_ball.direction[1] = BALL_MOVE_LEFT;
                 direction = BALL_MOVE_LEFT;
                 found = true;
               }
@@ -135,7 +130,6 @@ void detect_border()
       }
       else if (game_ball.direction[0] == BALL_MOVE_DOWN)//Going down
       {
-
         if (game_ball.direction[1] == BALL_MOVE_LEFT)
         {
             if(((game_ball.ball_y + 1 ) >= 0) && ((game_ball.ball_y + 1)<= 5)) //Y's which could be out of bounds
@@ -143,9 +137,7 @@ void detect_border()
             if((game_ball.ball_x - 1) < MAX_LEFT_CORD )
             {
               //Reflect as out of bounds
-              //game_ball.direction[1] = BALL_MOVE_RIGHT;
               direction = BALL_MOVE_RIGHT;
-
               found = true;
             }
           }
@@ -159,7 +151,6 @@ void detect_border()
               {
                 direction = BALL_MOVE_LEFT;
                 found = true;
-
               }
           }
         }
@@ -179,7 +170,6 @@ void detect_border()
             scorer = USER;
             restart = true;
           }
-
         }
         else if (game_ball.direction[0] == BALL_MOVE_DOWN)
         {
@@ -191,10 +181,7 @@ void detect_border()
            }
         }
       }
-
     }
-
-
 
 /*
 *Purpose: Detects whether the ball is going to colide with a paddle
@@ -219,7 +206,6 @@ void detect_paddle()
             //Reflect Left
             game_ball.direction[0] = BALL_MOVE_UP;
             game_ball.direction[1] = BALL_MOVE_LEFT;
-
           }
           else if (((game_ball.ball_y + 1) == USER_Y ) &&
               (game_ball.ball_x - 1 ) == player_1.get_paddle_right())
@@ -227,9 +213,7 @@ void detect_paddle()
                 //Reflect right
                 game_ball.direction[0] = BALL_MOVE_UP;
                 game_ball.direction[1] = BALL_MOVE_RIGHT;
-
               }
-
         }
         else
         {
@@ -241,7 +225,6 @@ void detect_paddle()
             //Reflect Left
             game_ball.direction[0] = BALL_MOVE_UP;
             game_ball.direction[1] = BALL_MOVE_LEFT;
-
           }
           else if (((game_ball.ball_y + 1) == USER_Y ) &&
               (game_ball.ball_x + 1 ) == player_1.get_paddle_right())
@@ -249,7 +232,6 @@ void detect_paddle()
                 //Reflect right
                 game_ball.direction[0] = BALL_MOVE_UP;
                 game_ball.direction[1] = BALL_MOVE_RIGHT;
-
               }
         }
       }
@@ -260,14 +242,12 @@ void detect_paddle()
         {
           game_ball.direction[0] = BALL_MOVE_UP;
           game_ball.direction[1] = BALL_MOVE_LEFT;
-
         }
         else if (((game_ball.ball_y + 1) == USER_Y) && (game_ball.ball_x == player_1.get_paddle_right()))
           //REFLECT RIGHT
           {
           game_ball.direction[0] = BALL_MOVE_UP;
           game_ball.direction[1] = BALL_MOVE_RIGHT;
-
         }
       }
     break;
@@ -284,8 +264,6 @@ void detect_paddle()
             //Reflect Left
             game_ball.direction[0] = BALL_MOVE_DOWN;
             game_ball.direction[1] = BALL_MOVE_LEFT;
-
-
           }
           else if (((game_ball.ball_y - 1) == OPPONENT_Y ) &&
               (game_ball.ball_x - 1 ) == computer_player.get_paddle_right())
@@ -293,9 +271,7 @@ void detect_paddle()
                 //Reflect right
                 game_ball.direction[0] = BALL_MOVE_DOWN;
                 game_ball.direction[1] = BALL_MOVE_RIGHT;
-
               }
-
         }
         else
         {
@@ -326,20 +302,16 @@ void detect_paddle()
         {
           game_ball.direction[0] = BALL_MOVE_DOWN;
           game_ball.direction[1] = BALL_MOVE_LEFT;
-
         }
         else if (((game_ball.ball_y - 1) == OPPONENT_Y) && (game_ball.ball_x == computer_player.get_paddle_right()))
           //REFLECT RIGHT
           {
           game_ball.direction[0] = BALL_MOVE_DOWN;
           game_ball.direction[1] = BALL_MOVE_RIGHT;
-
         }
       }
     break;
-
   }
-
 }
 
 /*
@@ -351,12 +323,10 @@ void draw_opponent_paddle()
 {
   if (finish)
   {
-
     release_fiber();
   }
   while(1)
   {
-
     if(new_round)
     {
       //draw the paddle for the computer in the top right
@@ -365,8 +335,6 @@ void draw_opponent_paddle()
       //Update the class co-ordinates
       computer_player.set_paddle_left(OPPONENT_START_X);
       computer_player.set_paddle_right(OPPONENT_START_X + 1);
-
-
     }
     else if (new_round == false)
     {
@@ -421,6 +389,7 @@ void draw_opponent_paddle()
     uBit.sleep(OPPONENT_PADDLE_SPEED);//Slow down paddle
   }
 }
+
 /*
 *Purpose: Draws the balll
 *Returns: Void
@@ -453,7 +422,6 @@ void draw_ball()
       {
         return;
       }
-
     }
     else
     {
@@ -464,7 +432,7 @@ void draw_ball()
           //every 2
           if(rally * 20 < (BALL_FALL_SPEED - 100) )//Don't fall too fast
           {
-          speed_increase = rally * 37;
+          speed_increase = rally * 37; //arbitary number
           }
         }
       }
@@ -472,22 +440,18 @@ void draw_ball()
         speed_increase = 0;
       }
      new_round = false;
-
-     detect_border();
-
-     detect_paddle();
-
-     detect_border();
-
+     //Enter sequence for checking where the ball can end up
+     detect_border(); //Check for wall
+     detect_paddle(); //Check for a paddle
+     detect_border(); //Check if the paddle has sent the ball back into a while
      update_ball(); //Move the ball
-
     }
-
       uBit.sleep(BALL_FALL_SPEED - speed_increase ); //Can't sleep at the start as new_round flag wont work
     }
 }
+
 /*
-*Purpose: tells the ball where the next pixel it should update is
+*Purpose: Tells the ball where the next pixel it should update is
 *Returns: Void
 *Accepts: N/A
 */
@@ -511,45 +475,36 @@ void update_ball()
     break;
 }
 //Left/Right
-
   switch(game_ball.direction[1])
   {
-
     case(BALL_MOVE_STRAIGHT):
         if (game_ball.direction[0] == BALL_MOVE_DOWN)
         {
           //Turn on below pixel
         screen.setPixelValue((game_ball.ball_x ), (game_ball.ball_y ),1 );
-
         }
         else if (game_ball.direction[0] == BALL_MOVE_UP)
         {
           //Turn on Above Pixel
           screen.setPixelValue((game_ball.ball_x ), (game_ball.ball_y ),1 );
-
         }
           break;
     case (BALL_MOVE_RIGHT):
           //Turn off the current pixel
-
           //Update the ball struct
           game_ball.ball_x = game_ball.ball_x + 1;
           //Turn on the pixel to the right
           screen.setPixelValue((game_ball.ball_x),game_ball.ball_y,1);
-
           break;
-
-
     case (BALL_MOVE_LEFT):
           //Update the ball struct
           game_ball.ball_x = game_ball.ball_x - 1;
           //Turn on the pixel to the left
           screen.setPixelValue((game_ball.ball_x ),game_ball.ball_y,1);
           break;
-
   }
-
 }
+
 /*
 *Purpose: Draws the users paddle on the grid
 *Returns: Void
@@ -557,7 +512,6 @@ void update_ball()
 */
 void draw_user_paddle()
 {
-
   if (finish)
   {
     release_fiber();
@@ -568,20 +522,15 @@ void draw_user_paddle()
     //Draw the paddle in the bottom left
     screen.setPixelValue(USER_START_X,USER_Y,1);
     screen.setPixelValue(1,USER_Y,1);
-    //Update the player calss with the co-ordinates
+    //Update the player class with the co-ordinates
     player_1.set_paddle_left(USER_START_X);
     player_1.set_paddle_right(USER_START_X + 1);
-    //new_round = false; //
-
   }
   //The user has moved
   else if ( (new_round == false) && (user_movement.trying_to_move == true))
   {
-
     if (user_movement.direction == LEFT_DIR )
     {
-
-
       if (player_1.get_paddle_left() != MAX_LEFT_CORD ) //Check if we're at max left
       {
         //set the right px to turn off
@@ -592,8 +541,6 @@ void draw_user_paddle()
         player_1.set_paddle_right(player_1.get_paddle_left());
         //Set the left paddle_right
         player_1.set_paddle_left(player_1.get_paddle_left() -1);
-
-
       }
     }
     else
@@ -612,53 +559,51 @@ void draw_user_paddle()
     }
         user_movement.trying_to_move = false; //reset flag
   }
-
 }
+
 /*
-*Purpose: Resets the game state
+*Purpose: Resets the game state by triggering all the variables
 *Returns: Void
 *Accepts: N/A
 */
 void reset()
 {   //Clear all the pixel
-
     screen.clear();
     user_movement.trying_to_move = false;
     computer_movement.trying_to_move = false;
-
+    //User
     //Draw the paddle in the bottom left
     screen.setPixelValue(USER_START_X,USER_Y,1);
     screen.setPixelValue(1,USER_Y,1);
     //Update the player calss with the co-ordinates
     player_1.set_paddle_left(USER_START_X);
     player_1.set_paddle_right(USER_START_X + 1);
-
-    //opponent      //draw the paddle for the computer in the top right
-          screen.setPixelValue(OPPONENT_START_X,OPPONENT_Y,1);
-          screen.setPixelValue(OPPONENT_START_X + 1 ,OPPONENT_Y,1);
-          //Update the class co-ordinates
-          computer_player.set_paddle_left(OPPONENT_START_X);
-          computer_player.set_paddle_right(OPPONENT_START_X + 1);
-          //Ball
-          rally = 0;
-          //Draw the ball in the middle of the screen
-          screen.setPixelValue(BALL_START_X,BALL_START_Y,1);
-          //Update the game ball
-          speed_increase = 0;
-          game_ball.ball_x = BALL_START_X;
-          game_ball.ball_y = BALL_START_Y;
-          game_ball.direction[0] = BALL_MOVE_DOWN;
-          game_ball.direction[1] = BALL_MOVE_STRAIGHT;
+    //opponent
+    //draw the paddle for the computer in the top right
+    screen.setPixelValue(OPPONENT_START_X,OPPONENT_Y,1);
+    screen.setPixelValue(OPPONENT_START_X + 1 ,OPPONENT_Y,1);
+    //Update the class co-ordinates
+    computer_player.set_paddle_left(OPPONENT_START_X);
+    computer_player.set_paddle_right(OPPONENT_START_X + 1);
+    //Ball
+    //Draw the ball in the middle of the screen
+    screen.setPixelValue(BALL_START_X,BALL_START_Y,1);
+    //Update the game ball
+    rally = 0;
+    speed_increase = 0;
+    game_ball.ball_x = BALL_START_X;
+    game_ball.ball_y = BALL_START_Y;
+    game_ball.direction[0] = BALL_MOVE_DOWN;
+    game_ball.direction[1] = BALL_MOVE_STRAIGHT;
     restart = false;
     new_round = false;
-
 }
+
 /*
 *Purpose: Handles the score of the game
 *Returns: Void
 *Accepts: N/A
 */
-
 void update_score()
 {
   switch(scorer)
@@ -674,11 +619,9 @@ void update_score()
     }
     scorer = 99;
       break;
-
   }
-
-
 }
+
 /*
 *Purpose: Controls the flow of the game
 *Returns: Void
@@ -687,13 +630,9 @@ void update_score()
 void pong()
 {
   //Create individual fibers to handle actor movement
-
   create_fiber(draw_user_paddle);
   create_fiber(draw_opponent_paddle);
   create_fiber(draw_ball);
-
-
-
   while(1) //Quit Condition
   {
     if (reset_y)
@@ -716,16 +655,18 @@ void pong()
         uBit.display.scroll("WINNER!!!");
         finish = true;
         release_fiber();
-
       }
         reset();
         reset_y = true;
     }
-
   }
-
-
 }
+
+/*
+*Purpose: Enter point for the program
+*Returns: Int (Never return by me.)
+*Accepts: N/A
+*/
 int main()
 {
   uBit.init(); //initialise the scheduler memory allocator and bluetooth stack
@@ -735,7 +676,5 @@ int main()
   while(1){
     uBit.display.scroll("PONG!!!");
     pong();
-
 }
-  release_fiber();//Release the main fiber
 }

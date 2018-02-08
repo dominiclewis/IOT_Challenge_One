@@ -88,5 +88,4 @@ class Player
     bool player_is_user;
     int paddle_left; //Co-Ord
     int paddle_right; //Co-Ord
-
 };
